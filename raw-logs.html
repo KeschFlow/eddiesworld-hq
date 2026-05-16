@@ -21,10 +21,7 @@
       <h2>RAW LOG ARCHIVE <span class="blink">_</span></h2>
       <p>COLLECTING DATA FOR VOL. 1</p>
     </header>
-    <section class="log-gallery" aria-label="RAW LOG ARCHIVE">
-      <article class="log-entry"><div class="log-header"><span>ID: RAW-LOG-001</span><span class="status">DATE: APR-2019</span></div><img src="/assets/raw-log-001.jpg" alt="RAW LOG 001" class="log-image" loading="lazy"><div class="log-actions"><button class="keep-log-btn" type="button" data-log-id="raw-log-001" aria-label="KEEP THIS"><img src="/assets/eddie_tongue_button_800080.png" alt="" onerror="this.style.display='none'"><span>KEEP THIS</span></button><span class="counter" id="counter-raw-log-001">[ KEEPS: 000 ]</span></div></article>
-      <article class="log-entry"><div class="log-header"><span>ID: RAW-LOG-002</span><span class="status">DATE: MAY-2019</span></div><img src="/assets/raw-log-002.jpg" alt="RAW LOG 002" class="log-image" loading="lazy"><div class="log-actions"><button class="keep-log-btn" type="button" data-log-id="raw-log-002" aria-label="KEEP THIS"><img src="/assets/eddie_tongue_button_800080.png" alt="" onerror="this.style.display='none'"><span>KEEP THIS</span></button><span class="counter" id="counter-raw-log-002">[ KEEPS: 000 ]</span></div></article>
-    </section>
+    <section class="log-gallery" id="log-gallery" aria-label="RAW LOG ARCHIVE"></section>
     <footer><span>The archive grows every day.</span><span>UNAUFHALTSAM.</span></footer>
   </main>
   <script type="module">
@@ -32,6 +29,36 @@
     import{getAuth,signInAnonymously,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import{getFirestore,doc,setDoc,updateDoc,increment,serverTimestamp,onSnapshot}from"https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
     import{firebaseConfig}from"./firebase-config.js";
+
+    const RAW_LOGS=[
+      {id:"raw-log-001",date:"APR-2019"},
+      {id:"raw-log-002",date:"MAY-2019"},
+      {id:"raw-log-003",date:"AUG-2019"},
+      {id:"raw-log-004",date:"AUG-2019"},
+      {id:"raw-log-005",date:"AUG-2019"},
+      {id:"raw-log-006",date:"AUG-2019"},
+      {id:"raw-log-007",date:"AUG-2019"},
+      {id:"raw-log-008",date:"AUG-2019"},
+      {id:"raw-log-009",date:"AUG-2019"},
+      {id:"raw-log-010",date:"AUG-2019"},
+      {id:"raw-log-011",date:"AUG-2019"},
+      {id:"raw-log-012",date:"AUG-2019"},
+      {id:"raw-log-013",date:"AUG-2019"},
+      {id:"raw-log-014",date:"AUG-2019"},
+      {id:"raw-log-015",date:"AUG-2019"},
+      {id:"raw-log-016",date:"AUG-2019"},
+      {id:"raw-log-017",date:"AUG-2019"},
+      {id:"raw-log-018",date:"AUG-2019"},
+      {id:"raw-log-019",date:"AUG-2019"}
+    ];
+
+    const gallery=document.getElementById("log-gallery");
+    gallery.innerHTML=RAW_LOGS.map(log=>{
+      const number=log.id.replace("raw-log-","");
+      const displayId=log.id.toUpperCase();
+      return `<article class="log-entry" id="${log.id}"><div class="log-header"><span>ID: ${displayId}</span><span class="status">DATE: ${log.date}</span></div><img src="/assets/${log.id}.jpg" alt="RAW LOG ${number}" class="log-image" loading="lazy"><div class="log-actions"><button class="keep-log-btn" type="button" data-log-id="${log.id}" aria-label="KEEP THIS"><img src="/assets/eddie_tongue_button_800080.png" alt="" onerror="this.style.display='none'"><span>KEEP THIS</span></button><span class="counter" id="counter-${log.id}">[ KEEPS: 000 ]</span></div></article>`;
+    }).join("");
+
     const app=initializeApp(firebaseConfig);const auth=getAuth(app);const db=getFirestore(app);signInAnonymously(auth).catch(error=>console.error("AUTH ERROR:",error));
     async function keepLog(logId){const ref=doc(db,"archive_selections",logId);try{await updateDoc(ref,{keeps:increment(1),updatedAt:serverTimestamp()});}catch(error){await setDoc(ref,{logId,keeps:1,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});}}
     function counterText(count){return`[ KEEPS: ${String(Number(count)||0).padStart(3,"0")} ]`;}
