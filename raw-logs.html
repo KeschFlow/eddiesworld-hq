@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDDIE'S WORLD // RAW LOGS</title>
+  <meta name="description" content="Eddie's World RAW LOG archive. Real life. No staging. Collecting data for Vol. 1.">
+  <meta name="theme-color" content="#800080">
+  <style>
+    :root{--eddie-black:#000000;--eddie-white:#FFFFFF;--eddie-purple:#800080;--line:rgba(255,255,255,.22);--muted:rgba(255,255,255,.68);--purple-soft:rgba(128,0,128,.35)}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:"Courier New",Courier,monospace}
+    html{scroll-behavior:smooth}body{min-height:100vh;background:var(--eddie-black);color:var(--eddie-white);line-height:1.5;padding:28px 14px 56px}body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,0) 50%,rgba(255,255,255,.06) 50%);background-size:100% 3px;opacity:.18;z-index:20}a{color:inherit;text-decoration:none}.page{width:min(860px,100%);margin:0 auto;position:relative;z-index:1}header{display:grid;gap:10px;margin-bottom:44px;border-bottom:1px dashed var(--line);padding-bottom:28px}.back{color:var(--muted);font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}.back:hover{color:var(--eddie-purple)}h1{font-size:clamp(26px,6vw,54px);line-height:.95;text-transform:uppercase;letter-spacing:-.05em;font-weight:950}h2{color:var(--eddie-purple);font-size:clamp(18px,3vw,26px);text-transform:uppercase;letter-spacing:.08em;margin-top:18px}p{color:var(--muted);font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.blink{animation:blinker 1s linear infinite}@keyframes blinker{50%{opacity:0}}.log-gallery{display:grid;gap:54px}.log-entry{background:var(--eddie-black);border:1px solid var(--line);padding:16px}.log-header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--eddie-white);font-size:13px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}.status{color:var(--eddie-purple)}.log-image{display:block;width:100%;height:auto;min-height:280px;object-fit:cover;background:var(--eddie-black);border:1px solid var(--line);margin-bottom:14px}.log-actions{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;border-top:1px dashed var(--line);padding-top:14px}.keep-log-btn{appearance:none;border:1px solid var(--eddie-white);background:var(--eddie-black);color:var(--eddie-white);min-height:46px;padding:0 14px;display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-size:12px;font-weight:950;letter-spacing:.12em;text-transform:uppercase;transition:transform .08s linear,color .12s linear,border-color .12s linear,background .12s linear}.keep-log-btn img{width:22px;height:22px;object-fit:contain;display:block}.keep-log-btn:active{transform:scale(.98)}.keep-log-btn:hover:not(:disabled){border-color:var(--eddie-purple);color:var(--eddie-purple)}.keep-log-btn.marked{background:var(--eddie-purple);color:var(--eddie-white);border-color:var(--eddie-white);cursor:default}.keep-log-btn[disabled]{opacity:.9}.counter{color:var(--muted);font-size:12px;font-weight:950;letter-spacing:.1em;text-transform:uppercase}footer{color:var(--muted);border-top:1px dashed var(--line);margin-top:56px;padding-top:24px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;font-weight:950;letter-spacing:.08em;text-transform:uppercase}@media(max-width:640px){body{padding-top:20px}.log-entry{padding:12px}.log-actions{align-items:stretch}.keep-log-btn{width:100%;justify-content:center}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <a class="back" href="/">&lt; Back to Eddie's World</a>
+      <h1>EDDIE'S WORLD // RAW LOGS</h1>
+      <p>Real life. No staging.</p>
+      <h2>RAW LOG ARCHIVE <span class="blink">_</span></h2>
+      <p>COLLECTING DATA FOR VOL. 1</p>
+    </header>
+    <section class="log-gallery" aria-label="RAW LOG ARCHIVE">
+      <article class="log-entry"><div class="log-header"><span>ID: RAW-LOG-001</span><span class="status">DATE: NOV-2023</span></div><img src="/assets/raw-logs/raw-log-001.jpg" alt="RAW LOG 001" class="log-image" loading="lazy"><div class="log-actions"><button class="keep-log-btn" type="button" data-log-id="raw-log-001" aria-label="KEEP THIS"><img src="/assets/eddie_tongue_button_800080.png" alt="" onerror="this.style.display='none'"><span>KEEP THIS</span></button><span class="counter" id="counter-raw-log-001">[ KEEPS: 000 ]</span></div></article>
+      <article class="log-entry"><div class="log-header"><span>ID: RAW-LOG-002</span><span class="status">DATE: DEC-2023</span></div><img src="/assets/raw-logs/raw-log-002.jpg" alt="RAW LOG 002" class="log-image" loading="lazy"><div class="log-actions"><button class="keep-log-btn" type="button" data-log-id="raw-log-002" aria-label="KEEP THIS"><img src="/assets/eddie_tongue_button_800080.png" alt="" onerror="this.style.display='none'"><span>KEEP THIS</span></button><span class="counter" id="counter-raw-log-002">[ KEEPS: 000 ]</span></div></article>
+    </section>
+    <footer><span>The archive grows every day.</span><span>UNAUFHALTSAM.</span></footer>
+  </main>
+  <script type="module">
+    import{initializeApp}from"https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import{getAuth,signInAnonymously,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import{getFirestore,doc,setDoc,updateDoc,increment,serverTimestamp,onSnapshot}from"https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    const firebaseConfig={apiKey:"PASTE_FIREBASE_API_KEY",authDomain:"PASTE_FIREBASE_AUTH_DOMAIN",projectId:"PASTE_FIREBASE_PROJECT_ID",storageBucket:"PASTE_FIREBASE_STORAGE_BUCKET",messagingSenderId:"PASTE_FIREBASE_MESSAGING_SENDER_ID",appId:"PASTE_FIREBASE_APP_ID"};
+    const isConfigured=!Object.values(firebaseConfig).some(value=>String(value).startsWith("PASTE_"));
+    let db=null,auth=null;
+    if(isConfigured){const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);signInAnonymously(auth).catch(error=>console.error("AUTH ERROR:",error));}
+    async function keepLog(logId){if(!isConfigured){console.log("MOCK KEEP",logId);return;}const ref=doc(db,"archive_selections",logId);try{await updateDoc(ref,{keeps:increment(1),updatedAt:serverTimestamp()});}catch(error){await setDoc(ref,{logId,keeps:1,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});}}
+    function counterText(count){return`[ KEEPS: ${String(Number(count)||0).padStart(3,"0")} ]`;}
+    document.querySelectorAll(".keep-log-btn").forEach(button=>{const logId=button.dataset.logId;const counter=document.getElementById(`counter-${logId}`);const localKey=`eddie_keep_${logId}`;if(localStorage.getItem(localKey)==="1"){button.classList.add("marked");button.disabled=true;button.querySelector("span").textContent="KEPT";button.setAttribute("aria-label","LOG MARKED FOR ARCHIVE");}if(isConfigured&&auth){onAuthStateChanged(auth,user=>{if(!user||!logId)return;const ref=doc(db,"archive_selections",logId);onSnapshot(ref,snapshot=>{if(!snapshot.exists())return;counter.textContent=counterText(snapshot.data().keeps);});});}button.addEventListener("click",async()=>{if(!logId||button.classList.contains("marked"))return;const span=button.querySelector("span");const originalText=span.textContent;button.disabled=true;span.textContent="SAVING...";try{await keepLog(logId);localStorage.setItem(localKey,"1");button.classList.add("marked");span.textContent="KEPT";button.setAttribute("aria-label","LOG MARKED FOR ARCHIVE");if(!isConfigured){const current=parseInt(counter.textContent.replace(/\D/g,""),10)||0;counter.textContent=counterText(current+1);}}catch(error){console.error("KEEP THIS FAILED:",error);button.disabled=false;span.textContent=originalText;}});});
+  </script>
+</body>
+</html>
