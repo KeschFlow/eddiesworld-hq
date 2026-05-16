@@ -1,146 +1,189 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Eddie’s World — Real life. No staging.</title>
-  <meta name="description" content="Eddie’s World. Real life. No staging. Echte Momente von Eddie. Kein Skript. Keine Show.">
-  <meta property="og:title" content="Eddie’s World">
-  <meta property="og:description" content="Real life. No staging. Echte Momente. Kein Skript. Keine Show.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://eddiesworld.de/">
-  <link rel="canonical" href="https://eddiesworld.de/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eddie's World | Real life. No staging.</title>
+  <meta name="description" content="Eddie's World: echte Eddie-Momente, tägliche Videos, Archiv, Unaufhaltsam und ruhiger Merch. Real life. No staging.">
   <style>
-    :root{
-      --bg:#050505;
-      --panel:#0c0c0f;
-      --panel2:#121218;
-      --text:#f5f2ea;
-      --muted:#a9a29a;
-      --line:#24242c;
-      --purple:#7C3AED;
-      --purple2:#a78bfa;
-      --max:1120px;
+    :root {
+      --bg: #050505;
+      --panel: #0b0b0d;
+      --panel2: #111115;
+      --line: #24242c;
+      --text: #f7f2ea;
+      --muted: #a6a09a;
+      --purple: #7C3AED;
+      --soft: rgba(124,58,237,.12);
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
-    a{color:inherit;text-decoration:none}
-    .wrap{width:min(var(--max),calc(100% - 32px));margin:0 auto}
-    header{position:sticky;top:0;z-index:30;background:rgba(5,5,5,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
-    .nav{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .brand{font-weight:950;letter-spacing:-.04em;font-size:22px}.brand span{color:var(--purple)}
-    .links{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:14px;font-weight:700}.links a:hover{color:var(--text)}
-    .hero{padding:82px 0 58px;display:grid;grid-template-columns:1fr .86fr;gap:44px;align-items:center;min-height:calc(100vh - 70px)}
-    .eyebrow{color:var(--purple2);font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.22em;margin-bottom:18px}
-    h1{font-size:clamp(54px,10vw,128px);line-height:.82;letter-spacing:-.085em;text-transform:uppercase;margin:0}.purple{color:var(--purple)}
-    .claim{font-size:clamp(28px,5vw,58px);line-height:.94;font-weight:950;letter-spacing:-.055em;margin-top:26px;max-width:760px}
-    .lead{color:var(--muted);font-size:18px;max-width:680px;margin-top:22px}.lead strong{color:var(--text)}
-    .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 18px;border-radius:999px;border:1px solid var(--line);font-weight:900;background:var(--text);color:var(--bg)}.btn.secondary{background:transparent;color:var(--text)}.btn:hover{transform:translateY(-1px)}
-    .videoBox{border:1px solid var(--line);border-radius:30px;overflow:hidden;background:#000;box-shadow:0 22px 80px rgba(0,0,0,.5)}.videoFrame{aspect-ratio:9/16;background:#000}.videoFrame iframe{width:100%;height:100%;border:0;display:block}.caption{padding:16px 18px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);background:var(--panel)}
-    section{padding:66px 0}.sectionHead{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:18px}.sectionTitle{font-size:clamp(34px,6vw,72px);line-height:.9;letter-spacing:-.065em;text-transform:uppercase}.sectionNote{color:var(--muted);max-width:420px;font-size:16px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid.two{grid-template-columns:repeat(2,1fr)}.card{border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,var(--panel2),var(--panel));padding:24px;min-height:190px}.card h3{font-size:22px;line-height:1.05;margin-bottom:12px}.card p{color:var(--muted);font-size:16px}.card strong{color:var(--text)}
-    .rule{border:1px solid var(--line);border-left:5px solid var(--purple);border-radius:22px;background:var(--panel2);padding:22px 24px;font-size:clamp(20px,3vw,32px);font-weight:950;line-height:1.15;letter-spacing:-.025em;margin-top:18px}
-    .stream{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px;align-items:start}.youtubeWide{border:1px solid var(--line);border-radius:28px;overflow:hidden;background:#000}.youtubeWide .wideFrame{aspect-ratio:16/9}.youtubeWide iframe{width:100%;height:100%;border:0;display:block}
-    .rows{display:grid;gap:10px}.row{display:flex;justify-content:space-between;gap:18px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025);padding:14px 16px;color:var(--muted)}.row b{color:var(--text)}
-    .quote{font-size:clamp(26px,5vw,58px);line-height:.96;font-weight:950;letter-spacing:-.06em;max-width:980px}.quote small{display:block;color:var(--muted);font-size:17px;line-height:1.5;font-weight:600;letter-spacing:0;margin-top:22px;max-width:760px}
-    .gameFrame{border:1px solid var(--line);border-radius:24px;overflow:hidden;background:#050505}.gameFrame iframe{width:100%;height:720px;border:0;display:block;background:#050505}
-    footer{border-top:1px solid var(--line);padding:34px 0 46px;color:var(--muted);font-size:14px}.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}.foot a:hover{color:var(--text)}
-    @media (max-width:900px){.hero,.stream{grid-template-columns:1fr}.videoBox{max-width:460px}.grid,.grid.two{grid-template-columns:1fr}.sectionHead{display:block}.sectionNote{margin-top:10px}.gameFrame iframe{height:680px}}
-    @media (max-width:640px){.nav{align-items:flex-start;flex-direction:column;padding:16px 0}.links{gap:10px}.hero{padding-top:46px}.row{display:block}.row span{display:block;margin-top:4px}.gameFrame iframe{height:620px}}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(rgba(255,255,255,0) 50%, rgba(0,0,0,.22) 50%);
+      background-size: 100% 3px;
+      opacity: .11;
+      z-index: 20;
+    }
+    a { color: inherit; text-decoration: none; }
+    .page { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(5,5,5,.84);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav { min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .brand { font-weight: 950; text-transform: uppercase; letter-spacing: -.04em; }
+    .navlinks { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; color: var(--muted); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .navlinks a:hover { color: var(--text); }
+    .hero { padding: 78px 0 44px; }
+    .hero-grid { display: grid; grid-template-columns: 1.02fr .98fr; gap: 34px; align-items: center; }
+    .eyebrow { color: var(--muted); font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 18px; }
+    h1 { font-size: clamp(48px, 11vw, 126px); line-height: .82; letter-spacing: -.085em; text-transform: uppercase; }
+    .purple { color: var(--purple); }
+    .lead { margin-top: 24px; max-width: 680px; font-size: clamp(21px, 3.2vw, 38px); line-height: 1.05; font-weight: 950; letter-spacing: -.04em; }
+    .copy { margin-top: 18px; max-width: 680px; color: var(--muted); font-size: 17px; }
+    .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .btn { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); font-weight: 950; text-transform: uppercase; letter-spacing: .04em; font-size: 13px; }
+    .btn.main { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .btn.purple { background: var(--purple); color: #fff; border-color: var(--purple); }
+    .video-card { border: 1px solid var(--line); border-radius: 28px; overflow: hidden; background: var(--panel); box-shadow: 0 24px 80px rgba(0,0,0,.45); }
+    .video-frame { aspect-ratio: 9 / 16; width: 100%; background: #000; }
+    .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .video-meta { padding: 16px 18px; color: var(--muted); border-top: 1px solid var(--line); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    section.block { padding: 52px 0; }
+    .section-kicker { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .18em; font-weight: 900; margin-bottom: 12px; }
+    h2 { font-size: clamp(32px, 6vw, 68px); line-height: .9; letter-spacing: -.06em; text-transform: uppercase; margin-bottom: 18px; }
+    .rule { background: var(--panel2); border: 1px solid var(--line); border-left: 5px solid var(--purple); border-radius: 20px; padding: 22px; font-weight: 950; font-size: clamp(18px, 2.8vw, 30px); letter-spacing: -.03em; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 22px; min-height: 190px; transition: border-color .18s, background .18s, transform .18s; }
+    a.card:hover { border-color: var(--purple); background: var(--soft); transform: translateY(-2px); }
+    .card h3 { font-size: 21px; text-transform: uppercase; letter-spacing: -.02em; margin-bottom: 10px; }
+    .card p { color: var(--muted); }
+    .wide { grid-column: span 2; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .status { display: flex; gap: 10px; align-items: center; margin-top: 18px; color: var(--muted); font-weight: 900; text-transform: uppercase; font-size: 12px; letter-spacing: .08em; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 0 8px rgba(124,58,237,.12); }
+    footer { margin-top: 30px; border-top: 1px solid var(--line); color: var(--muted); padding: 28px 0 44px; font-size: 13px; }
+    .foot { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+    .foot a { color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: .06em; margin-left: 12px; }
+    .foot a:hover { color: var(--purple); }
+    @media (max-width: 860px) {
+      .hero-grid, .grid, .split { grid-template-columns: 1fr; }
+      .wide { grid-column: auto; }
+      .hero { padding-top: 48px; }
+      .video-card { max-width: 430px; margin: 0 auto; }
+      .nav { align-items: flex-start; flex-direction: column; padding: 16px 0; }
+      .foot a { margin-left: 0; margin-right: 12px; }
+    }
   </style>
 </head>
 <body>
-<header>
-  <div class="wrap nav">
-    <a class="brand" href="#top">Eddie’s <span>World</span></a>
-    <nav class="links" aria-label="Navigation">
-      <a href="#videos">Videos</a>
-      <a href="#haltung">Haltung</a>
-      <a href="#content">Content</a>
-      <a href="#archive">Archiv</a>
-      <a href="#merch">Merch</a>
-      <a href="#unaufhaltsam">Spiel</a>
-    </nav>
-  </div>
-</header>
-<main id="top">
-  <section class="wrap hero">
-    <div>
-      <div class="eyebrow">Working Terrier · echte Momente · kein Theater</div>
-      <h1>Eddie’s <span class="purple">World</span></h1>
-      <div class="claim">Real life. No staging.</div>
-      <p class="lead">Eddie, Working Terrier. Echte Momente, genau wie sie passieren. Kein Skript. Keine Show. Keine künstliche Stimmung. <strong>Originalton oder Stille.</strong></p>
-      <div class="cta">
-        <a class="btn" href="https://www.youtube.com/@Eddie-Unaufhaltsam" target="_blank" rel="noopener">YouTube öffnen</a>
-        <a class="btn secondary" href="#videos">Aktuelle Videos</a>
-        <a class="btn secondary" href="#archive">Archiv</a>
+  <header>
+    <div class="page nav">
+      <a class="brand" href="#top">Eddie's <span class="purple">World</span></a>
+      <nav class="navlinks" aria-label="Navigation">
+        <a href="#videos">Videos</a>
+        <a href="#haltung">Haltung</a>
+        <a href="#archiv">Archiv</a>
+        <a href="#unaufhaltsam">Unaufhaltsam</a>
+        <a href="#merch">Merch</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero page" id="videos">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Working Terrier · echtes Leben · täglicher Strom</div>
+          <h1>Eddie's <span class="purple">World</span></h1>
+          <p class="lead">Real life. No staging.</p>
+          <p class="copy">Eddie wird nicht inszeniert. Eddie lebt. Diese Seite sammelt den täglichen Videostrom, das Archiv, Nebenprojekte und alles, was aus echten Momenten entstehen kann.</p>
+          <div class="buttons">
+            <a class="btn main" href="https://www.youtube.com/@Eddie-Unaufhaltsam" target="_blank" rel="noopener noreferrer">YouTube öffnen</a>
+            <a class="btn" href="#haltung">Was das ist</a>
+          </div>
+          <div class="status"><span class="dot"></span><span>1 echtes Eddie-Video pro Tag bleibt der Kern.</span></div>
+        </div>
+        <aside class="video-card">
+          <div class="video-frame">
+            <iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU3XnWzjzZc4yAh8CMgw2y7A&rel=0" title="Eddie's World YouTube uploads" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          </div>
+          <div class="video-meta">Aktuelle Uploads · Originalton · keine Show</div>
+        </aside>
       </div>
-    </div>
-    <aside class="videoBox" aria-label="Aktueller YouTube-Stream">
-      <div class="videoFrame">
-        <iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU3XnWzjzZc4yAh8CMgw2y7A&rel=0" title="Eddie's World YouTube Uploads" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </section>
+
+    <section class="block page" id="haltung">
+      <div class="section-kicker">Einstellung</div>
+      <h2>Nicht perfekt. Echt.</h2>
+      <div class="rule">Keine künstliche Bühne. Kein Drehbuch. Kein Verkaufsdruck. Eddie macht sein Ding — und genau das ist die Marke.</div>
+      <div class="grid" style="margin-top:14px;">
+        <article class="card"><h3>Freiheit</h3><p>Die Seite verkauft kein falsches Leben. Sie hält fest, was sowieso passiert: laufen, suchen, buddeln, gucken, ruhen, weitergehen.</p></article>
+        <article class="card"><h3>Originalton</h3><p>Kein Fremdsound als Maske. Wenn Ton da ist, ist es echter Ton. Wenn Stille stärker ist, bleibt es still.</p></article>
+        <article class="card"><h3>Langzeit</h3><p>Das ist kein einzelner Clip. Das ist ein wachsendes Archiv aus einem echten Hundeleben.</p></article>
       </div>
-      <div class="caption">Der laufende Strom: echte Eddie-Videos aus dem Alltag.</div>
-    </aside>
-  </section>
-  <section class="wrap" id="videos">
-    <div class="sectionHead"><h2 class="sectionTitle">Videos zuerst</h2><p class="sectionNote">Die Website zeigt zuerst, was lebt: Eddies laufende Spur. Bilder sind wichtig, aber sie gehören ins Archiv und später in Bücher.</p></div>
-    <div class="stream">
-      <div class="rule">Ein echtes Eddie-Video pro Tag bleibt die Basis. Mehr nur, wenn es passt.</div>
-      <div class="youtubeWide"><div class="wideFrame"><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU3XnWzjzZc4yAh8CMgw2y7A&rel=0" title="Eddie's World Videos" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div></div>
+    </section>
+
+    <section class="block page">
+      <div class="section-kicker">System</div>
+      <h2>Der tägliche Kern</h2>
+      <div class="split">
+        <div class="card"><h3>Videos zuerst</h3><p>Die Startseite zeigt den laufenden Strom. YouTube bleibt die Hauptspur, weil dort das Tagesvideo und das Archiv zusammenkommen.</p></div>
+        <div class="card"><h3>Kein Druck nach außen</h3><p>Mehr geht immer, aber Pflicht bleibt nur eine Sache: ein echter Eddie-Moment pro Tag. Mehr nur, wenn es passt.</p></div>
+      </div>
+    </section>
+
+    <section class="block page" id="archiv">
+      <div class="section-kicker">Real Moments</div>
+      <h2>Archiv wächst unten drunter</h2>
+      <div class="grid">
+        <article class="card wide"><h3>Bilder und Clips</h3><p>Bilder sind nicht der Ersatz für Videos. Sie sind Material: Monatsarchiv, spätere Bücher, echte Momente, Rohstoff für Eddie's World.</p></article>
+        <article class="card"><h3>Originale bleiben sicher</h3><p>Sortieren ja. Zerstören nein. Erst Manifest, dann Export, nie blind an den Originalen reißen.</p></article>
+      </div>
+    </section>
+
+    <section class="block page" id="unaufhaltsam">
+      <div class="section-kicker">Nebenraum</div>
+      <h2>Unaufhaltsam</h2>
+      <div class="grid">
+        <a class="card wide" href="https://keschflow.github.io/unaufhaltsam/" target="_blank" rel="noopener noreferrer"><h3>Fokus-Test starten</h3><p>Das Spiel bleibt unten als eigener Raum. Nicht Hauptseite, nicht Ersatz für Eddie. Ein Nebenprojekt aus derselben Welt.</p><div class="status"><span class="dot"></span><span>Spiel öffnen</span></div></a>
+        <article class="card"><h3>Warum unten?</h3><p>Oben lebt Eddie. Unten liegen Spiel, Merch, Archiv und spätere Bücher sauber angebunden.</p></article>
+      </div>
+    </section>
+
+    <section class="block page" id="merch">
+      <div class="section-kicker">Nebenlinie</div>
+      <h2>Merch</h2>
+      <div class="rule">Wenn du Eddie's World tragen willst, hier ist der Ort. Kein Muss. Kein Drop. Kein Druck.</div>
+      <div class="grid" style="margin-top:14px;">
+        <a class="card" href="https://jutn.creator-spring.com/listing/eddies-world-unaufhaltsam" target="_blank" rel="noopener noreferrer"><h3>Merch ansehen</h3><p>Sauber angebunden, aber nicht der Kern. Der Kern bleibt Eddie.</p></a>
+        <a class="card" href="https://www.tiktok.com/@eddie_unaufhaltsam" target="_blank" rel="noopener noreferrer"><h3>TikTok</h3><p>Reichweite, kurze Momente, kein künstlicher Zirkus.</p></a>
+        <a class="card" href="https://www.instagram.com/eddie_unaufhaltsam?igsh=ZTlwdnRyOXkzY3lm" target="_blank" rel="noopener noreferrer"><h3>Instagram</h3><p>Visuelles Markenbild aus echten Momenten.</p></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="page foot">
+      <span>Eddie's World · Real life. No staging.</span>
+      <span><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a><a href="/kontakt">Kontakt</a></span>
     </div>
-    <div class="grid" style="margin-top:16px">
-      <article class="card"><h3>Prüfen</h3><p>Vor dem Upload wird der Kandidat gegen das Upload-Ledger geprüft. Nicht doppelt. Nicht raten.</p></article>
-      <article class="card"><h3>Veröffentlichen</h3><p>YouTube zuerst. TikTok, Reddit und Instagram nach Möglichkeit. Reddit ohne Druck, weil dort 24-Stunden-Regeln gelten.</p></article>
-      <article class="card"><h3>Zurückführen</h3><p>Was hochgeladen wurde, kommt zurück ins System: Datum, Link, Status, später Auswertung.</p></article>
-    </div>
-  </section>
-  <section class="wrap" id="haltung">
-    <div class="sectionHead"><h2 class="sectionTitle">Haltung</h2><p class="sectionNote">Eddie’s World ist keine Show und kein Verkaufstrichter. Es ist eine Aufzeichnung echten Lebens.</p></div>
-    <div class="quote">Zeit ist nicht das, was übrig bleibt. Zeit ist das Leben selbst.<small>Geld ist wichtig, aber nicht wichtiger als Gesundheit, Freiheit, echte Menschen, bedingungslose Liebe und Vertrauen. Man muss nicht alles. Man stirbt irgendwann. Dazwischen gehört das Leben einem selbst.</small></div>
-    <div class="grid" style="margin-top:22px">
-      <article class="card"><h3>Keine Inszenierung</h3><p>Kein Studio. Kein Skript. Kein künstliches Aufräumen. Echte Momente bleiben echte Momente.</p></article>
-      <article class="card"><h3>Kein Druck</h3><p>Keine Drops. Keine Premium-Sprache. Kein „kauf mein Zeug“. Wer bleiben will, bleibt freiwillig.</p></article>
-      <article class="card"><h3>Kein Lärm</h3><p>Keine fremde Musik als Emotions-Teppich. Originalton, Atmen, Wind, Pfoten, Straße, Stille.</p></article>
-    </div>
-  </section>
-  <section class="wrap" id="content">
-    <div class="sectionHead"><h2 class="sectionTitle">Content-Art</h2><p class="sectionNote">Der Content ist kein Hochglanz-Hundeformat. Er ist laufende Aufzeichnung.</p></div>
-    <div class="grid">
-      <article class="card"><h3>Daily Real Videos</h3><p>Der Motor. Jeden Tag ein echter Eddie-Moment. Kurz, roh, direkt, nicht überproduziert.</p></article>
-      <article class="card"><h3>Archive</h3><p>Bilder und Clips nach Monaten. Originale bleiben sicher. Manifest wird Wahrheit. Export wird sauber.</p></article>
-      <article class="card"><h3>Real Moments</h3><p>Menschen können später markieren, was hängen bleibt. Keine Voting-Show. Nur Resonanz.</p></article>
-      <article class="card"><h3>Only Eddie / Books</h3><p>Aus echten Momenten können später KDP-taugliche Bücher entstehen. Kein Ramsch. Keine Low-Content-Nummer.</p></article>
-      <article class="card"><h3>E.P.E.</h3><p>Die interne Maschine: Archiv lesen, IDs bauen, Website füttern, KDP-PDFs vorbereiten. Zeit sparen.</p></article>
-      <article class="card"><h3>Unaufhaltsam</h3><p>Ein Nebenraum. Das Spiel bleibt, aber Eddie’s echtes Leben ist der Kern der Marke.</p></article>
-    </div>
-  </section>
-  <section class="wrap" id="archive">
-    <div class="sectionHead"><h2 class="sectionTitle">Archiv</h2><p class="sectionNote">Hier kommen die Bilder und Monatsblöcke hin. Nicht als Chaos, sondern als ruhige Ordnung.</p></div>
-    <div class="rows">
-      <div class="row"><b>Videos</b><span>laufender Strom, YouTube zuerst</span></div>
-      <div class="row"><b>Bilder</b><span>Monatsarchiv, später Real Moments</span></div>
-      <div class="row"><b>Originale</b><span>bleiben sicher, keine blinden Änderungen</span></div>
-      <div class="row"><b>IDs</b><span>JAN-001, FEB-001, MAR-001 …</span></div>
-      <div class="row"><b>Print</b><span>später Only Eddie / KDP, wenn es würdig ist</span></div>
-    </div>
-  </section>
-  <section class="wrap" id="merch">
-    <div class="sectionHead"><h2 class="sectionTitle">Merch</h2><p class="sectionNote">Merch ist angebunden, aber nicht der Mittelpunkt. Wer Eddie’s World tragen will, findet den Weg.</p></div>
-    <div class="grid two">
-      <article class="card"><h3>Eddie’s World Merch</h3><p>Shirts und Sachen als Nebenlinie. Kein Muss. Kein Drop. Kein Druck.</p><p style="margin-top:18px"><a class="btn" href="https://jutn.creator-spring.com/listing/eddies-world-unaufhaltsam" target="_blank" rel="noopener">Merch ansehen</a></p></article>
-      <article class="card"><h3>Später sauberer</h3><p>Wenn Bücher und Print stehen, kann dieser Bereich wachsen. Ruhig, passend, ohne Marktschreierei.</p></article>
-    </div>
-  </section>
-  <section class="wrap" id="unaufhaltsam">
-    <div class="sectionHead"><h2 class="sectionTitle">Unaufhaltsam</h2><p class="sectionNote">Das Spiel bleibt als Nebenraum unten. Nicht als Zentrum. Nicht über Eddie gestellt.</p></div>
-    <div class="gameFrame"><iframe src="https://keschflow.github.io/unaufhaltsam/" title="Unaufhaltsam Spiel" loading="lazy"></iframe></div>
-    <p style="color:var(--muted);margin-top:12px">Falls das Spiel hier nicht lädt: <a style="color:var(--purple2);font-weight:900" href="https://keschflow.github.io/unaufhaltsam/" target="_blank" rel="noopener">Unaufhaltsam direkt öffnen</a>.</p>
-  </section>
-</main>
-<footer>
-  <div class="wrap foot"><span>Eddie’s World · Real life. No staging.</span><span><a href="https://www.youtube.com/@Eddie-Unaufhaltsam" target="_blank" rel="noopener">YouTube</a> · <a href="https://jutn.creator-spring.com/listing/eddies-world-unaufhaltsam" target="_blank" rel="noopener">Merch</a> · <a href="/impressum">Impressum</a> · <a href="/datenschutz">Datenschutz</a></span></div>
-</footer>
+  </footer>
 </body>
 </html>
