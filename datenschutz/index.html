@@ -1,41 +1,36 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex">
-  <title>Datenschutz | Eddie's World</title>
-  <style>
-    :root{--purple:#800080;--black:#000;--white:#fff;--muted:rgba(255,255,255,.72);--line:rgba(255,255,255,.22)}
-    *{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;background:var(--black);color:var(--white);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55;padding:32px 16px}.page{width:min(860px,100%);margin:0 auto}.back{display:inline-block;margin-bottom:36px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.1em;text-decoration:none}.back:hover{color:var(--purple)}h1{font-size:clamp(42px,9vw,92px);line-height:.85;letter-spacing:-.07em;text-transform:uppercase;margin-bottom:22px}.purple{color:var(--purple)}.card{border:1px solid var(--line);border-left:5px solid var(--purple);border-radius:22px;padding:22px;margin:16px 0}.label{color:var(--muted);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px}p,li{color:var(--muted);font-size:16px;margin:8px 0}ul{padding-left:20px}strong{color:var(--white)}a{color:var(--white)}footer{margin-top:44px;border-top:1px solid var(--line);padding-top:20px;color:var(--muted);font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datenschutz - Eddie’s World</title>
+    <style>
+        body { background-color: #000; color: #fff; font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: auto; }
+        h1, h2 { color: #800080; border-bottom: 1px solid #800080; padding-bottom: 5px; }
+        a { color: #800080; text-decoration: none; }
+        .back-link { display: block; margin-top: 50px; font-weight: bold; }
+    </style>
 </head>
 <body>
-  <main class="page">
-    <a class="back" href="/">&lt; Zurück zu Eddie's World</a>
-    <h1>Daten<span class="purple">schutz</span></h1>
-    <section class="card">
-      <div class="label">Verantwortlicher</div>
-      <p><strong>Kevin Schulze</strong></p>
-      <p>Kontakt: <a href="mailto:schulze.kevin81@gmail.com">schulze.kevin81@gmail.com</a></p>
-    </section>
-    <section class="card">
-      <div class="label">Grundsatz</div>
-      <p>Diese Website ist bewusst einfach gehalten. Keine Werbeprofile, kein Newsletter-Zwang, kein Tracking-System als Geschäftsmodell.</p>
-    </section>
-    <section class="card">
-      <div class="label">Eingebundene Dienste</div>
-      <ul>
-        <li>GitHub Pages stellt diese Website technisch bereit.</li>
-        <li>YouTube kann beim Laden eingebetteter Videos Daten verarbeiten.</li>
-        <li>Firebase/Google Cloud wird für interaktive Funktionen wie RAW-LOG-Keeps und das Unaufhaltsam-Leaderboard genutzt.</li>
-      </ul>
-    </section>
-    <section class="card">
-      <div class="label">Hinweis</div>
-      <p>Diese Seite ist als technische Platzhalterseite angelegt, damit der Link nicht ins Leere läuft. Die Datenschutzhinweise müssen vor öffentlicher Nutzung final rechtlich geprüft und ergänzt werden.</p>
-    </section>
-    <footer>Eddie's World · Real life. No staging.</footer>
-  </main>
+    <h1>Datenschutzerklärung</h1>
+    
+    <h2>1. Datenschutz auf einen Blick</h2>
+    <p>Diese Webseite wird über GitHub Pages gehostet. Wir erfassen nur Daten, die technisch notwendig sind oder die du uns aktiv durch die Teilnahme am Spiel (Unaufhaltsam) oder dem Archiv-Voting (KEEP-THIS) übermittelst.</p>
+
+    <h2>2. Hosting und Infrastruktur</h2>
+    <p>Unsere Website liegt auf Servern von GitHub Inc. (USA). Beim Aufruf der Seite werden Logfiles (IP-Adresse, Zeitstempel) durch den Hoster verarbeitet.</p>
+    <p>Für interaktive Funktionen (Leaderboard, Archiv-Counter) nutzen wir Firebase (Google Cloud Platform). Die Datenverarbeitung erfolgt in der Region eur3 (Europa).</p>
+
+    <h2>3. Datenerfassung durch Interaktion</h2>
+    <p><strong>Unaufhaltsam Leaderboard:</strong> Wenn du deinen Score speicherst, werden dein gewählter Name, Score, Zeit und eine anonyme Firebase-Auth-ID gespeichert. Dies dient der Darstellung im Leaderboard.</p>
+    <p><strong>RAW LOGS Counter:</strong> Beim Klicken auf "KEEP THIS" wird ein Zähler in Firestore erhöht, um die Beliebtheit von Inhalten zu messen.</p>
+
+    <h2>4. YouTube & Externe Links</h2>
+    <p>Videos werden im erweiterten Datenschutzmodus über youtube-nocookie.com eingebunden. Ein Datenaustausch mit YouTube findet erst beim Start des Videos statt. Externe Links zu TikTok, Instagram, Reddit oder Merch-Shops führen dich auf die Plattformen der jeweiligen Anbieter; dort gelten deren Datenschutzbestimmungen.</p>
+
+    <h2>5. Deine Rechte</h2>
+    <p>Du hast das Recht auf Auskunft, Berichtigung und Löschung deiner gespeicherten Daten. Kontaktiere uns dazu einfach per E-Mail.</p>
+
+    <a href="/" class="back-link">← Zurück zur Startseite</a>
 </body>
 </html>
