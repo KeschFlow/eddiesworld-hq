@@ -16,7 +16,7 @@
       --fg: #f2f2f2;
       --muted: #a8a8a8;
       --line: #2a2a2a;
-      --button: #800080;
+      --purple: #800080;
       --buttonText: #ffffff;
     }
 
@@ -103,7 +103,7 @@
 
     .principle span {
       display: block;
-      color: var(--button);
+      color: var(--purple);
       font-size: 12px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
@@ -121,17 +121,29 @@
       display: block;
       padding: 16px 18px;
       border-radius: 14px;
-      background: var(--button);
+      background: transparent;
       color: var(--buttonText);
+      border: 1px solid var(--line);
       text-decoration: none;
       font-weight: 700;
       font-size: 16px;
+      transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
     }
 
-    a.button.secondary {
-      background: transparent;
-      color: var(--fg);
-      border: 1px solid var(--line);
+    a.button:active,
+    a.button:focus {
+      background: var(--purple);
+      border-color: var(--purple);
+      color: #ffffff;
+      outline: none;
+    }
+
+    a.button:focus-visible {
+      background: var(--purple);
+      border-color: var(--purple);
+      color: #ffffff;
+      outline: 2px solid rgba(128, 0, 128, 0.45);
+      outline-offset: 3px;
     }
 
     .socials {
@@ -192,7 +204,7 @@
   <main>
     <div class="tag">SYSTEM ONLINE</div>
 
-    <h1>EDDIE'S<br>WORLD</h1>
+    <h1>EDDIE'S<br />WORLD</h1>
 
     <div class="claim">Real life. No staging.</div>
 
@@ -230,7 +242,7 @@
       </a>
 
       <a
-        class="button secondary"
+        class="button"
         href="https://focus-system-unaufhaltsam.github.io/eddie/"
         target="_blank"
         rel="noopener noreferrer"
@@ -238,11 +250,11 @@
         Unaufhaltsam öffnen
       </a>
 
-      <a class="button secondary" href="/raw-logs.html">
+      <a class="button" href="/raw-logs.html">
         Archiv / Raw Logs
       </a>
 
-      <a class="button secondary" href="/books/">
+      <a class="button" href="/books/">
         Bücher / Raw Editions
       </a>
     </div>
