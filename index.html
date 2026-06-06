@@ -42,7 +42,7 @@
 
     main {
       width: 100%;
-      max-width: 520px;
+      max-width: 560px;
       text-align: center;
     }
 
@@ -55,16 +55,18 @@
     }
 
     h1 {
-      font-size: clamp(38px, 10vw, 68px);
-      line-height: 0.92;
-      margin: 0 0 14px;
-      letter-spacing: -0.05em;
+      font-size: clamp(42px, 10vw, 74px);
+      line-height: 0.9;
+      margin: 0 0 16px;
+      letter-spacing: -0.06em;
+      font-weight: 900;
     }
 
     .claim {
       font-size: 18px;
       color: var(--fg);
-      margin-bottom: 32px;
+      margin-bottom: 34px;
+      font-weight: 700;
     }
 
     .text {
@@ -72,7 +74,7 @@
       font-size: 16px;
       line-height: 1.55;
       margin: 0 auto 34px;
-      max-width: 430px;
+      max-width: 440px;
     }
 
     .text strong {
@@ -81,25 +83,32 @@
     }
 
     .principles {
-      display: grid;
-      gap: 10px;
-      margin: 0 auto 34px;
-      max-width: 430px;
+      margin: 0 auto 38px;
+      max-width: 500px;
+      padding: 4px 0 0;
     }
 
     .principle {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px 16px;
+      font-size: clamp(18px, 3.6vw, 25px);
+      line-height: 1.18;
+      letter-spacing: -0.04em;
+      font-weight: 800;
       color: var(--fg);
-      font-size: 15px;
-      line-height: 1.4;
-      background: rgba(255, 255, 255, 0.02);
+      margin: 0 auto 18px;
+    }
+
+    .principle:last-child {
+      margin-bottom: 0;
     }
 
     .principle span {
-      color: var(--muted);
-      margin-right: 6px;
+      display: block;
+      color: var(--button);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      font-weight: 900;
     }
 
     .links {
@@ -153,6 +162,29 @@
     a:hover {
       opacity: 0.86;
     }
+
+    @media (max-width: 480px) {
+      body {
+        align-items: flex-start;
+        padding: 34px 18px 28px;
+      }
+
+      .claim {
+        margin-bottom: 28px;
+      }
+
+      .text {
+        margin-bottom: 30px;
+      }
+
+      .principles {
+        margin-bottom: 34px;
+      }
+
+      .principle {
+        margin-bottom: 20px;
+      }
+    }
   </style>
 </head>
 
@@ -172,13 +204,18 @@
 
     <div class="principles">
       <div class="principle">
-        <span>1.</span>Tue was du liebst, dann brauchst du nie wieder arbeiten.
+        <span>Grundsatz 01</span>
+        Tue was du liebst, dann brauchst du nie wieder arbeiten.
       </div>
+
       <div class="principle">
-        <span>2.</span>Zeit ist das wertvollste Asset in deinem Portfolio.
+        <span>Grundsatz 02</span>
+        Zeit ist das wertvollste Asset in deinem Portfolio.
       </div>
+
       <div class="principle">
-        <span>3.</span>Bedingungslose Liebe ist die einzig wahre Liebe.
+        <span>Grundsatz 03</span>
+        Bedingungslose Liebe ist die einzig wahre Liebe.
       </div>
     </div>
 
