@@ -117,7 +117,9 @@
       margin-bottom: 28px;
     }
 
-    a.button {
+    .links a.button,
+    .links a.button:link,
+    .links a.button:visited {
       display: block;
       padding: 16px 18px;
       border-radius: 14px;
@@ -127,18 +129,32 @@
       text-decoration: none;
       font-weight: 700;
       font-size: 16px;
-      transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+      transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        opacity 0.15s ease;
     }
 
-    a.button:active,
-    a.button:focus {
+    .links a.button:hover {
+      opacity: 0.86;
+      background: transparent;
+      border-color: var(--line);
+    }
+
+    .links a.button:active {
       background: var(--purple);
       border-color: var(--purple);
+      color: #ffffff;
+    }
+
+    .links a.button:focus {
+      background: transparent;
+      border-color: var(--line);
       color: #ffffff;
       outline: none;
     }
 
-    a.button:focus-visible {
+    .links a.button:focus-visible {
       background: var(--purple);
       border-color: var(--purple);
       color: #ffffff;
@@ -160,6 +176,10 @@
       font-size: 14px;
     }
 
+    .socials a:hover {
+      opacity: 0.86;
+    }
+
     footer {
       color: #777;
       font-size: 13px;
@@ -171,7 +191,7 @@
       margin: 0 6px;
     }
 
-    a:hover {
+    footer a:hover {
       opacity: 0.86;
     }
 
