@@ -1,215 +1,164 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eddie's World | Real life. No staging.</title>
-  <meta name="description" content="Eddie's World. Real life. No staging. No script, no role, no must.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eddie's World</title>
+  <meta name="description" content="Eddie's World. Real life. No staging. Eddie ist echt. Kein Drehbuch. Keine Show." />
+
   <style>
     :root {
-      --eddie-purple: #800080;
-      --eddie-black: #000000;
-      --eddie-white: #FFFFFF;
+      --bg: #050505;
+      --fg: #f2f2f2;
+      --muted: #a8a8a8;
+      --line: #2a2a2a;
+      --button: #800080;
+      --buttonText: #ffffff;
+    }
 
-      --bg: var(--eddie-black);
-      --panel: var(--eddie-black);
-      --panel2: var(--eddie-black);
-      --line: rgba(255,255,255,.22);
-      --text: var(--eddie-white);
-      --muted: rgba(255,255,255,.72);
-      --purple: var(--eddie-purple);
-      --soft: rgba(128,0,128,.18);
+    * {
+      box-sizing: border-box;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      line-height: 1.5;
+      margin: 0;
       min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
     }
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background: linear-gradient(rgba(255,255,255,0) 50%, rgba(0,0,0,.22) 50%);
-      background-size: 100% 3px;
-      opacity: .11;
-      z-index: 20;
+
+    main {
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
     }
-    a { color: inherit; text-decoration: none; }
-    .page { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      background: rgba(0,0,0,.84);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--line);
+
+    .tag {
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      margin-bottom: 18px;
+      text-transform: uppercase;
     }
-    .nav { min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
-    .brand { font-weight: 950; text-transform: uppercase; letter-spacing: -.04em; }
-    .navlinks { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; color: var(--muted); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
-    .navlinks a:hover { color: var(--text); }
-    .hero { padding: 78px 0 44px; }
-    .hero-grid { display: grid; grid-template-columns: 1.02fr .98fr; gap: 34px; align-items: center; }
-    .eyebrow { color: var(--muted); font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 18px; }
-    h1 { font-size: clamp(48px, 11vw, 126px); line-height: .82; letter-spacing: -.085em; text-transform: uppercase; }
-    .purple { color: var(--purple); }
-    .lead { margin-top: 24px; max-width: 680px; font-size: clamp(21px, 3.2vw, 38px); line-height: 1.05; font-weight: 950; letter-spacing: -.04em; }
-    .copy { margin-top: 18px; max-width: 680px; color: var(--muted); font-size: 17px; }
-    .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-    .btn { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; padding: 0 18px; border-radius: 999px; border: 1px solid var(--purple); background: var(--purple); color: var(--eddie-white); font-weight: 950; text-transform: uppercase; letter-spacing: .04em; font-size: 13px; }
-    .btn:hover { filter: brightness(1.15); }
-    .video-card { border: 1px solid var(--line); border-radius: 28px; overflow: hidden; background: var(--panel); box-shadow: 0 24px 80px rgba(0,0,0,.45); }
-    .video-frame { aspect-ratio: 9 / 16; width: 100%; background: var(--eddie-black); }
-    .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
-    .video-meta { padding: 16px 18px; color: var(--muted); border-top: 1px solid var(--line); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
-    section.block { padding: 52px 0; }
-    .section-kicker { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .18em; font-weight: 900; margin-bottom: 12px; }
-    h2 { font-size: clamp(32px, 6vw, 68px); line-height: .9; letter-spacing: -.06em; text-transform: uppercase; margin-bottom: 18px; }
-    .rule { background: var(--panel2); border: 1px solid var(--line); border-left: 5px solid var(--purple); border-radius: 20px; padding: 22px; font-weight: 950; font-size: clamp(18px, 2.8vw, 30px); letter-spacing: -.03em; }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 22px; min-height: 190px; transition: border-color .18s, background .18s, transform .18s; }
-    a.card:hover { border-color: var(--purple); background: var(--soft); transform: translateY(-2px); }
-    .card h3 { font-size: 21px; text-transform: uppercase; letter-spacing: -.02em; margin-bottom: 10px; }
-    .card p { color: var(--muted); }
-    .wide { grid-column: span 2; }
-    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .status { display: flex; gap: 10px; align-items: center; margin-top: 18px; color: var(--muted); font-weight: 900; text-transform: uppercase; font-size: 12px; letter-spacing: .08em; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 0 8px rgba(128,0,128,.16); }
-    footer { margin-top: 30px; border-top: 1px solid var(--line); color: var(--muted); padding: 28px 0 44px; font-size: 13px; }
-    .foot { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
-    .foot a { color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: .06em; margin-left: 12px; }
-    .foot a:hover { color: var(--purple); }
-    @media (max-width: 860px) {
-      .hero-grid, .grid, .split { grid-template-columns: 1fr; }
-      .wide { grid-column: auto; }
-      .hero { padding-top: 48px; }
-      .video-card { max-width: 430px; margin: 0 auto; }
-      .nav { align-items: flex-start; flex-direction: column; padding: 16px 0; }
-      .foot a { margin-left: 0; margin-right: 12px; }
+
+    h1 {
+      font-size: clamp(38px, 10vw, 68px);
+      line-height: 0.92;
+      margin: 0 0 14px;
+      letter-spacing: -0.05em;
+    }
+
+    .claim {
+      font-size: 18px;
+      color: var(--fg);
+      margin-bottom: 32px;
+    }
+
+    .text {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+      margin: 0 auto 34px;
+      max-width: 430px;
+    }
+
+    .text strong {
+      color: var(--fg);
+      font-weight: 700;
+    }
+
+    .links {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    a.button {
+      display: block;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: var(--button);
+      color: var(--buttonText);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    a.button.secondary {
+      background: transparent;
+      color: var(--fg);
+      border: 1px solid var(--line);
+    }
+
+    .socials {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+
+    .socials a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    footer {
+      color: #777;
+      font-size: 13px;
+    }
+
+    footer a {
+      color: #777;
+      text-decoration: none;
+      margin: 0 6px;
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="page nav">
-      <a class="brand" href="#top">Eddie's <span class="purple">World</span></a>
-      <nav class="navlinks" aria-label="Navigation">
-        <a href="#watch">Watch</a>
-        <a href="#world">World</a>
-        <a href="#freedom">Freedom</a>
-        <a href="/raw-logs.html">Archive</a>
-        <a href="#game">Game</a>
-        <a href="#social">Social</a>
-        <a href="#merch">Merch</a>
-      </nav>
+  <main>
+    <div class="tag">SYSTEM ONLINE</div>
+
+    <h1>EDDIE'S<br>WORLD</h1>
+
+    <div class="claim">Real life. No staging.</div>
+
+    <p class="text">
+      <strong>Eddie ist kein Maskottchen.</strong><br>
+      Eddie ist echt.<br>
+      Kein Drehbuch. Keine Show. Kein Creator-Theater.
+    </p>
+
+    <div class="links">
+      <a class="button" href="https://www.youtube.com/@Eddie-Unaufhaltsam" target="_blank" rel="noopener noreferrer">YouTube ansehen</a>
+
+      <a class="button secondary" href="https://focus-system-unaufhaltsam.github.io/eddie/" target="_blank" rel="noopener noreferrer">Unaufhaltsam öffnen</a>
+
+      <a class="button secondary" href="/raw-logs.html">Archiv / Raw Logs</a>
+
+      <a class="button secondary" href="/books/">Bücher / Raw Editions</a>
     </div>
-  </header>
 
-  <main id="top">
-    <section class="hero page" id="watch">
-      <div class="hero-grid">
-        <div>
-          <div class="eyebrow">Working terrier · raw moments · no act</div>
-          <h1>Eddie's <span class="purple">World</span></h1>
-          <p class="lead">Real life. No staging.</p>
-          <p class="copy">A dog. A world. What happens, happens. No fake story. No cute-content machine. No borrowed script. Just Eddie being Eddie.</p>
-          <div class="buttons">
-            <a class="btn" href="https://www.youtube.com/@Eddie-Unaufhaltsam" target="_blank" rel="noopener noreferrer">Watch</a>
-            <a class="btn" href="/raw-logs.html">RAW LOGS</a>
-            <a class="btn" href="https://www.reddit.com/u/KeSchFlow/s/OXSfIaELKq" target="_blank" rel="noopener noreferrer">Reddit</a>
-            <a class="btn" href="#world">Enter the world</a>
-          </div>
-          <div class="status"><span class="dot"></span><span>No script. No role. No must.</span></div>
-        </div>
-        <aside class="video-card">
-          <div class="video-frame">
-            <iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU3XnWzjzZc4yAh8CMgw2y7A&rel=0" title="Eddie's World" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-          </div>
-          <div class="video-meta">Watch Eddie. No script.</div>
-        </aside>
-      </div>
-    </section>
+    <div class="socials">
+      <a href="https://www.tiktok.com/@eddie_unaufhaltsam" target="_blank" rel="noopener noreferrer">TikTok</a>
+      <a href="https://www.instagram.com/eddie_unaufhaltsam?igsh=ZTlwdnRyOXkzY3lm" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="https://www.reddit.com/u/KeSchFlow/s/OXSfIaELKq" target="_blank" rel="noopener noreferrer">Reddit</a>
+    </div>
 
-    <section class="block page" id="world">
-      <div class="section-kicker">The world</div>
-      <h2>He does what he does.</h2>
-      <div class="rule">Running. Searching. Waiting. Staring. Digging. Resting. Moving on.</div>
-      <div class="grid" style="margin-top:14px;">
-        <article class="card"><h3>No act</h3><p>No studio dog. No trained smile. No scene built for clicks.</p></article>
-        <article class="card"><h3>No polish</h3><p>Wind, dirt, bad angles, silence, noise. It stays in if it belongs.</p></article>
-        <article class="card"><h3>No fake meaning</h3><p>Not every moment needs a lesson. Some things are just real.</p></article>
-      </div>
-    </section>
-
-    <section class="block page" id="freedom">
-      <div class="section-kicker">Freedom</div>
-      <h2>No borrowed script.</h2>
-      <div class="rule">You do not have to live inside someone else's idea of life.</div>
-      <div class="split" style="margin-top:14px;">
-        <div class="card"><h3>No must</h3><p>No forced role. No fake path. No pressure dressed up as advice.</p></div>
-        <div class="card"><h3>Own pace</h3><p>Do it when it comes from you. Or don't. That is the point.</p></div>
-      </div>
-    </section>
-
-    <section class="block page">
-      <div class="section-kicker">Signal</div>
-      <h2>Not pet content.</h2>
-      <div class="split">
-        <div class="card"><h3>Outside world</h3><p>Eddie is not decoration. He is movement, instinct, mood, chaos, quiet.</p></div>
-        <div class="card"><h3>Real moments</h3><p>The camera follows. It does not command. The moment comes first.</p></div>
-      </div>
-    </section>
-
-    <section class="block page" id="archive">
-      <div class="section-kicker">Archive</div>
-      <h2>The pile of proof.</h2>
-      <div class="grid">
-        <a class="card wide" href="/raw-logs.html"><h3>Clips. Photos. Days.</h3><p>Not a polished gallery. A living archive. Seasons, walks, looks, nonsense, little things that would disappear.</p><div class="status"><span class="dot"></span><span>Open RAW LOGS</span></div></a>
-        <article class="card"><h3>Later</h3><p>Books, prints, collections. Only if the material deserves it.</p></article>
-      </div>
-    </section>
-
-    <section class="block page" id="game">
-      <div class="section-kicker">Side quest</div>
-      <h2>Unaufhaltsam</h2>
-      <div class="grid">
-        <a class="card wide" href="https://focus-system-unaufhaltsam.github.io/eddie/" target="_blank" rel="noopener noreferrer"><h3>Focus test</h3><p>A small game from the same world. Not the main thing. Just a door on the side.</p><div class="status"><span class="dot"></span><span>Open game</span></div></a>
-        <article class="card"><h3>Down here</h3><p>Eddie first. Everything else stays below.</p></article>
-      </div>
-    </section>
-
-    <section class="block page" id="social">
-      <div class="section-kicker">Social</div>
-      <h2>Where it moves.</h2>
-      <div class="grid">
-        <a class="card" href="https://www.youtube.com/@Eddie-Unaufhaltsam" target="_blank" rel="noopener noreferrer"><h3>YouTube</h3><p>The main stream.</p></a>
-        <a class="card" href="https://www.reddit.com/u/KeSchFlow/s/OXSfIaELKq" target="_blank" rel="noopener noreferrer"><h3>Reddit</h3><p>Raw drops into the outside world.</p></a>
-        <a class="card" href="https://www.tiktok.com/@eddie_unaufhaltsam" target="_blank" rel="noopener noreferrer"><h3>TikTok</h3><p>Short cuts from the same world.</p></a>
-        <a class="card" href="https://www.instagram.com/eddie_unaufhaltsam?igsh=ZTlwdnRyOXkzY3lm" target="_blank" rel="noopener noreferrer"><h3>Instagram</h3><p>Frames, moments, proof.</p></a>
-      </div>
-    </section>
-
-    <section class="block page" id="merch">
-      <div class="section-kicker">Gear</div>
-      <h2>Wear it or don't.</h2>
-      <div class="rule">No drop. No hype. No pressure.</div>
-      <div class="grid" style="margin-top:14px;">
-        <a class="card" href="https://jutn.creator-spring.com/listing/eddies-world-unaufhaltsam" target="_blank" rel="noopener noreferrer"><h3>Merch</h3><p>For people who get it. That is all.</p></a>
-      </div>
-    </section>
+    <footer>
+      <a href="/impressum">Impressum</a>
+      ·
+      <a href="/datenschutz">Datenschutz</a>
+      ·
+      <a href="/kontakt">Kontakt</a>
+    </footer>
   </main>
-
-  <footer>
-    <div class="page foot">
-      <span>Eddie's World · No script. No role. No must.</span>
-      <span><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a><a href="/kontakt">Kontakt</a></span>
-    </div>
-  </footer>
 </body>
 </html>
