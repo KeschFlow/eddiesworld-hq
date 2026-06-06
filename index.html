@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Eddie's World</title>
-  <meta name="description" content="Eddie's World. Real life. No staging. Eddie ist echt. Kein Drehbuch. Keine Show." />
+  <meta
+    name="description"
+    content="Eddie's World. Real life. No staging. Eddie ist echt. Kein Drehbuch. Keine Show."
+  />
 
   <style>
     :root {
@@ -18,6 +22,10 @@
 
     * {
       box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
     }
 
     body {
@@ -72,6 +80,28 @@
       font-weight: 700;
     }
 
+    .principles {
+      display: grid;
+      gap: 10px;
+      margin: 0 auto 34px;
+      max-width: 430px;
+    }
+
+    .principle {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: var(--fg);
+      font-size: 15px;
+      line-height: 1.4;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .principle span {
+      color: var(--muted);
+      margin-right: 6px;
+    }
+
     .links {
       display: grid;
       gap: 12px;
@@ -119,6 +149,10 @@
       text-decoration: none;
       margin: 0 6px;
     }
+
+    a:hover {
+      opacity: 0.86;
+    }
   </style>
 </head>
 
@@ -131,25 +165,75 @@
     <div class="claim">Real life. No staging.</div>
 
     <p class="text">
-      <strong>Eddie ist kein Maskottchen.</strong><br>
-      Eddie ist echt.<br>
+      <strong>Eddie ist kein Maskottchen.</strong><br />
+      Eddie ist echt.<br />
       Kein Drehbuch. Keine Show. Kein Creator-Theater.
     </p>
 
+    <div class="principles">
+      <div class="principle">
+        <span>1.</span>Tue was du liebst, dann brauchst du nie wieder arbeiten.
+      </div>
+      <div class="principle">
+        <span>2.</span>Zeit ist das wertvollste Asset in deinem Portfolio.
+      </div>
+      <div class="principle">
+        <span>3.</span>Bedingungslose Liebe ist die einzig wahre Liebe.
+      </div>
+    </div>
+
     <div class="links">
-      <a class="button" href="https://www.youtube.com/@Eddie-Unaufhaltsam" target="_blank" rel="noopener noreferrer">YouTube ansehen</a>
+      <a
+        class="button"
+        href="https://www.youtube.com/@Eddie-Unaufhaltsam"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        YouTube ansehen
+      </a>
 
-      <a class="button secondary" href="https://focus-system-unaufhaltsam.github.io/eddie/" target="_blank" rel="noopener noreferrer">Unaufhaltsam öffnen</a>
+      <a
+        class="button secondary"
+        href="https://focus-system-unaufhaltsam.github.io/eddie/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Unaufhaltsam öffnen
+      </a>
 
-      <a class="button secondary" href="/raw-logs.html">Archiv / Raw Logs</a>
+      <a class="button secondary" href="/raw-logs.html">
+        Archiv / Raw Logs
+      </a>
 
-      <a class="button secondary" href="/books/">Bücher / Raw Editions</a>
+      <a class="button secondary" href="/books/">
+        Bücher / Raw Editions
+      </a>
     </div>
 
     <div class="socials">
-      <a href="https://www.tiktok.com/@eddie_unaufhaltsam" target="_blank" rel="noopener noreferrer">TikTok</a>
-      <a href="https://www.instagram.com/eddie_unaufhaltsam?igsh=ZTlwdnRyOXkzY3lm" target="_blank" rel="noopener noreferrer">Instagram</a>
-      <a href="https://www.reddit.com/u/KeSchFlow/s/OXSfIaELKq" target="_blank" rel="noopener noreferrer">Reddit</a>
+      <a
+        href="https://www.tiktok.com/@eddie_unaufhaltsam"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        TikTok
+      </a>
+
+      <a
+        href="https://www.instagram.com/eddie_unaufhaltsam?igsh=ZTlwdnRyOXkzY3lm"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Instagram
+      </a>
+
+      <a
+        href="https://www.reddit.com/u/KeSchFlow/s/OXSfIaELKq"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Reddit
+      </a>
     </div>
 
     <footer>
