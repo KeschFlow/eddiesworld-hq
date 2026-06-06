@@ -135,30 +135,35 @@
         opacity 0.15s ease;
     }
 
-    .links a.button:hover {
-      opacity: 0.86;
-      background: transparent;
-      border-color: var(--line);
-    }
-
-    .links a.button:active {
+    .links a.button.active,
+    .links a.button.active:link,
+    .links a.button.active:visited {
       background: var(--purple);
       border-color: var(--purple);
       color: #ffffff;
     }
 
-    .links a.button:focus {
+    .links a.button.inactive,
+    .links a.button.inactive:link,
+    .links a.button.inactive:visited {
       background: transparent;
       border-color: var(--line);
-      color: #ffffff;
-      outline: none;
+      color: var(--fg);
+      opacity: 0.72;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .links a.button:hover {
+      opacity: 0.86;
+    }
+
+    .links a.button.active:hover {
+      opacity: 0.9;
     }
 
     .links a.button:focus-visible {
-      background: var(--purple);
-      border-color: var(--purple);
-      color: #ffffff;
-      outline: 2px solid rgba(128, 0, 128, 0.45);
+      outline: 2px solid rgba(128, 0, 128, 0.5);
       outline-offset: 3px;
     }
 
@@ -253,7 +258,7 @@
 
     <div class="links">
       <a
-        class="button"
+        class="button active"
         href="https://www.youtube.com/@Eddie-Unaufhaltsam"
         target="_blank"
         rel="noopener noreferrer"
@@ -262,7 +267,7 @@
       </a>
 
       <a
-        class="button"
+        class="button active"
         href="https://focus-system-unaufhaltsam.github.io/eddie/"
         target="_blank"
         rel="noopener noreferrer"
@@ -270,11 +275,11 @@
         Unaufhaltsam öffnen
       </a>
 
-      <a class="button" href="/raw-logs.html">
+      <a class="button active" href="/raw-logs.html">
         Archiv / Raw Logs
       </a>
 
-      <a class="button" href="/books/">
+      <a class="button inactive" href="/books/" aria-disabled="true">
         Bücher / Raw Editions
       </a>
     </div>
