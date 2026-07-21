@@ -387,7 +387,8 @@
     </div>
 
     <div class="links">
-      <a
+     <a 
+        id="unaufhaltsam-link"
         class="button active"
         href="https://focus-system-unaufhaltsam.github.io/eddie/"
         target="_blank"
@@ -482,5 +483,19 @@
       <a href="/kontakt">Kontakt</a>
     </footer>
   </main>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const link = document.getElementById("unaufhaltsam-link");
+
+  if (!link) return;
+
+  const params = window.location.search;
+
+  if (params) {
+    link.href =
+      "https://focus-system-unaufhaltsam.github.io/eddie/" + params;
+  }
+});
+</script>
 </body>
 </html>
