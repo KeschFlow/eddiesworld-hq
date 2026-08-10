@@ -282,11 +282,12 @@
 
     <a
       class="button"
-      href="/books/"
-      target="_blank"
-      rel="noopener noreferrer"
+      href="https://www.amazon.de/dp/B0H7KX8XF4"
+      data-amazon-product-cta
+      data-source="hq"
+      data-status-target="amazonClickStatus"
     >
-      <span>Bücher / Raw Editions</span>
+      <span>LIFE OS Junior 04–06 ansehen</span>
     </a>
 
     <a
@@ -299,6 +300,8 @@
     </a>
 
   </div>
+
+  <p id="amazonClickStatus" role="status" aria-live="polite"></p>
 
   <div class="socials">
 
@@ -359,5 +362,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<script src="/amazon-outbound.js"></script>
 </body>
 </html>
