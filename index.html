@@ -4,12 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>UNAUFHALTSAM | Eddie's World</title>
+  <title>Eddie's World | Bücher, Merch &amp; UNAUFHALTSAM</title>
 
   <meta
     name="description"
-    content="UNAUFHALTSAM ist eine Web-Anwendung von Eddie's World. Das Fokus-Game testet Konzentration, Merkfähigkeit und Durchhaltevermögen. Die optionale YouTube-Verbindung ermöglicht autorisierten Nutzern, Videos auf ihren eigenen YouTube-Kanal hochzuladen."
+    content="Eddie's World: Real life. No staging. Entdecke LIFE OS Junior, Aktivitätsbücher, Merch und das Fokus-Game UNAUFHALTSAM."
   />
+
+  <link rel="canonical" href="https://eddiesworld.de/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="de_DE" />
+  <meta property="og:site_name" content="Eddie's World" />
+  <meta property="og:title" content="Eddie's World — Real life. No staging." />
+  <meta property="og:description" content="Eddie, echte Momente, Bücher und Merch. Dazu das Fokus-Game UNAUFHALTSAM." />
+  <meta property="og:url" content="https://eddiesworld.de/" />
+  <meta property="og:image" content="https://eddiesworld.de/assets/eddie_tongue_button_800080.png" />
+  <meta property="og:image:alt" content="Die Purpur-Zunge von Eddie's World" />
+  <meta name="twitter:card" content="summary" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","name":"Eddie's World","url":"https://eddiesworld.de/","inLanguage":"de","description":"Real life. No staging. Eddie, Bücher, Merch und UNAUFHALTSAM."}
+  </script>
 
   <style>
     :root {
@@ -139,6 +153,28 @@
       font-size:17px;
     }
 
+    .entry-nav {
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:12px 22px;
+      margin:0 0 28px;
+    }
+
+    .entry-nav a { color:var(--fg); text-underline-offset:4px; }
+    a:focus-visible { outline:2px solid #fff; outline-offset:4px; }
+    .product {
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:22px;
+      margin-bottom:32px;
+      text-align:left;
+    }
+    .product h2 { margin:0 0 12px; font-size:25px; }
+    .product p { color:var(--muted); line-height:1.55; }
+    .product .links { margin-bottom:14px; }
+    .product > a { color:var(--fg); text-underline-offset:4px; }
+
     .button-icon {
       width:24px;
       height:24px;
@@ -206,6 +242,31 @@
     Eddie ist echt.<br />
     Kein Drehbuch. Keine Show. Kein Creator-Theater.
   </p>
+
+  <nav class="entry-nav" aria-label="Eddie’s World entdecken">
+    <a href="/books/">Bücher</a>
+    <a href="https://jutn.creator-spring.com/listing/eddies-world-unaufhaltsam" target="_blank" rel="noopener noreferrer">Merch</a>
+    <a href="/raw-logs.html">Eddie / Raw Logs</a>
+  </nav>
+
+  <section class="product" aria-labelledby="book-title">
+    <h2 id="book-title">LIFE OS Junior · 4–6 Jahre</h2>
+    <p>30 Mitmach-Aufgaben zum Anfangen, Üben, Dranbleiben und Fortschritte wahrnehmen.</p>
+    <div class="links">
+    <a
+      class="button"
+      href="https://www.amazon.de/dp/B0H7KX8XF4"
+      data-amazon-product-cta
+      data-source="hq"
+      data-status-target="amazonClickStatus"
+    >
+      <span>Buch auf Amazon ansehen</span>
+    </a>
+
+    </div>
+    <a href="/books/">Alle fünf Bücher ansehen →</a>
+    <p id="amazonClickStatus" role="status" aria-live="polite"></p>
+  </section>
 
   <div class="principles">
 
@@ -282,16 +343,6 @@
 
     <a
       class="button"
-      href="https://www.amazon.de/dp/B0H7KX8XF4"
-      data-amazon-product-cta
-      data-source="hq"
-      data-status-target="amazonClickStatus"
-    >
-      <span>LIFE OS Junior 04–06 ansehen</span>
-    </a>
-
-    <a
-      class="button"
       href="https://jutn.creator-spring.com/listing/eddies-world-unaufhaltsam"
       target="_blank"
       rel="noopener noreferrer"
@@ -301,7 +352,6 @@
 
   </div>
 
-  <p id="amazonClickStatus" role="status" aria-live="polite"></p>
 
   <div class="socials">
 

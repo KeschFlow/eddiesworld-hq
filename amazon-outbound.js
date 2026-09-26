@@ -91,18 +91,27 @@
   document.querySelectorAll("[data-amazon-product-cta]").forEach((element) => {
     let active = false;
     element.addEventListener("click", async (event) => {
+      // Keep native new-tab and modified-click behavior.
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       if (active) return;
       active = true;
       element.setAttribute("aria-disabled", "true");
-      setStatus(element, isTestEvent() ? "TEST-Klick wird registriert ..." : "Klick wird registriert ...");
+      setStatus(element, isTestEvent() ? "TEST-Klick wird registriert ..." : "Amazon wird geöffnet …");
+      let timeout;
       try {
-        await recordClick(element.dataset.source);
-        location.assign(DESTINATION);
+        // Measurement must never block the purchase path.
+        await Promise.race([
+          recordClick(element.dataset.source),
+          new Promise((resolve) => { timeout = setTimeout(resolve, 1200); })
+        ]);
       } catch (_) {
+        // An unrecorded click is preferable to a blocked customer.
+      } finally {
+        clearTimeout(timeout);
         active = false;
         element.removeAttribute("aria-disabled");
-        setStatus(element, "Klick konnte nicht registriert werden. Bitte erneut versuchen.");
+        location.assign(DESTINATION);
       }
     });
   });
