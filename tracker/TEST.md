@@ -6,6 +6,12 @@ Stand: 02.10.2026. Nur Tracker; andere Systeme bleiben unangetastet.
 
 Tag 1 bleibt AUS, bis die GA4-Ereignisse live empfangen und TikTok/YouTube getrennt geprüft sind sowie der kostenlose Sandbox-Durchlauf Redirect und PDF-Zugriff bestätigt. Keine kostenpflichtige Eigenzahlung.
 
+## Verifizierter Stand
+
+02.10.2026, 10:52-10:54 Europe/Berlin: Nutzer-Screenshots aus der GA4-Echtzeitansicht der Property mg-challenge bestätigen `page_view=2`, `tracker_landing_view=2` und `tracker_checkout_click=2`. Beim Checkout-Ereignis zeigt `utm_source` die Werte `tiktok=1` und `youtube=1`. Event-Empfang und Quellentrennung: PASS. Diese Prüfsessions sind kein Kauf- oder Umsatznachweis. Supermetrics ist für den Test nicht erforderlich.
+
+Noch offen: kostenloser Stripe-Sandbox-Zahlungsdurchlauf und Korrektur der alten Stripe-Produktbeschreibung "einseitig". Tag 1 bleibt AUS.
+
 ## Messung
 
 GA4-Property: 546402390 (mg-challenge / Eddie's World).
