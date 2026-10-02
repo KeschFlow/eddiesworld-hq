@@ -13,6 +13,12 @@ h1{font-size:clamp(42px,11vw,70px);line-height:.94;letter-spacing:-.05em;margin:
 .card{border:1px solid var(--line);border-radius:18px;padding:24px;margin:28px 0;text-align:left}.card p{color:var(--muted);line-height:1.55}
 .price{font-size:34px;font-weight:900;margin:22px 0}.buy{display:block;padding:18px;border-radius:18px;background:var(--purple);color:#fff;text-decoration:none;font-size:18px;font-weight:900;text-align:center}
 .note{font-size:13px;color:var(--muted);margin-top:14px}footer{margin-top:32px;font-size:14px}footer a{color:var(--muted);margin:0 7px}
+
+.analytics-choice{border-top:1px solid var(--line);padding:18px 0;margin-top:28px;font-size:13px;color:var(--muted);line-height:1.5}
+.analytics-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.analytics-actions button,#analytics-settings{font:inherit;color:var(--fg);background:transparent;border:1px solid var(--muted);border-radius:8px;padding:10px 14px;cursor:pointer}
+#analytics-settings{margin-top:16px;color:var(--muted);font-size:12px}
+[hidden]{display:none!important}
 </style>
 </head>
 <body><main>
@@ -28,17 +34,89 @@ h1{font-size:clamp(42px,11vw,70px);line-height:.94;letter-spacing:-.05em;margin:
 <div class="note">Digitaler PDF-Download nach dem Kauf.</div>
 </section>
 <footer><a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a></footer>
+
+<section id="analytics-choice" class="analytics-choice" aria-label="Besuchsmessung" hidden>
+<p>Dürfen wir mit Google Analytics Seitenaufrufe und Kaufbutton-Klicks messen? Dabei werden Cookies, eine pseudonyme Gerätekennung und die Herkunft des Besuchs verarbeitet. Anbieter: Google Ireland Limited; eine Verarbeitung in den USA ist möglich. Die Auswahl ist freiwillig und jederzeit hier änderbar. <a href="https://policies.google.com/privacy" style="color:inherit">Google-Datenschutz</a></p>
+<div class="analytics-actions"><button id="analytics-accept" type="button">Erlauben</button><button id="analytics-decline" type="button">Ablehnen</button></div>
+</section>
+<button id="analytics-settings" type="button">Besuchsmessung ändern</button>
 </main>
 <script>
 const PAYMENT_LINK="https://buy.stripe.com/eVq3cu2zM8bx1Yhe7t8Ra00";
+const GA_MEASUREMENT_ID="G-0DFW5EMT8M";
+const CONSENT_KEY="eddie_tracker_analytics";
 const p=new URLSearchParams(location.search);
 const source=(p.get("utm_source")||"direct").replace(/[^a-zA-Z0-9_-]/g,"").slice(0,80)||"direct";
+const isTest=p.get("tracker_test")==="1";
 const buy=document.getElementById("buy");
-if(PAYMENT_LINK.startsWith("https://")){
-  const u=new URL(PAYMENT_LINK); u.searchParams.set("client_reference_id",source); buy.href=u.toString(); buy.removeAttribute("aria-disabled");
+const u=new URL(PAYMENT_LINK);
+u.searchParams.set("client_reference_id",(isTest?"test_":"")+source);
+buy.href=u.toString();
+const choice=document.getElementById("analytics-choice");
+let analyticsEnabled=false;
+let analyticsStarted=false;
+window.dataLayer=window.dataLayer||[];
+function gtag(){window.dataLayer.push(arguments);}
+gtag("consent","default",{analytics_storage:"denied",ad_storage:"denied",ad_user_data:"denied",ad_personalization:"denied"});
+function eventParams(){
+  const params={send_to:GA_MEASUREMENT_ID,utm_source:source,tracker_source:source,tracker_test:isTest?"yes":"no"};
+  if(isTest)params.debug_mode=true;
+  return params;
 }
+function startAnalytics(){
+  if(analyticsStarted){
+    analyticsEnabled=true;
+    gtag("consent","update",{analytics_storage:"granted"});
+    return;
+  }
+  analyticsStarted=true;
+  analyticsEnabled=true;
+  gtag("consent","update",{analytics_storage:"granted"});
+  gtag("js",new Date());
+  const config={send_page_view:false,allow_google_signals:false,allow_ad_personalization_signals:false};
+  if(p.has("utm_source")){
+    config.campaign_source=source;
+    config.campaign_medium=p.get("utm_medium")||"social";
+    if(p.has("utm_campaign"))config.campaign_name=p.get("utm_campaign");
+  }
+  if(isTest)config.debug_mode=true;
+  gtag("config",GA_MEASUREMENT_ID,config);
+  gtag("event","page_view",eventParams());
+  gtag("event","tracker_landing_view",eventParams());
+  const tag=document.createElement("script");
+  tag.async=true;
+  tag.src="https://www.googletagmanager.com/gtag/js?id="+GA_MEASUREMENT_ID;
+  document.head.appendChild(tag);
+}
+function readConsent(){
+  try{return localStorage.getItem(CONSENT_KEY);}catch{return null;}
+}
+function saveConsent(value){
+  try{localStorage.setItem(CONSENT_KEY,value);}catch{}
+}
+if(readConsent()==="granted")startAnalytics();
+else if(readConsent()!=="denied")choice.hidden=false;
+document.getElementById("analytics-accept").addEventListener("click",()=>{
+  saveConsent("granted");choice.hidden=true;startAnalytics();
+});
+document.getElementById("analytics-decline").addEventListener("click",()=>{
+  saveConsent("denied");choice.hidden=true;analyticsEnabled=false;
+  if(analyticsStarted)gtag("consent","update",{analytics_storage:"denied"});
+});
+document.getElementById("analytics-settings").addEventListener("click",()=>{
+  choice.hidden=false;
+});
 buy.addEventListener("click",e=>{
-  if(!buy.href.startsWith("http")){e.preventDefault();return;}
-  if(typeof gtag==="function")gtag("event","tracker_checkout_click",{utm_source:source});
+  if(!analyticsEnabled)return;
+  const params=eventParams();
+  if(e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey){
+    gtag("event","tracker_checkout_click",params);
+    return;
+  }
+  e.preventDefault();
+  let continued=false;
+  const proceed=()=>{if(!continued){continued=true;location.assign(buy.href);}};
+  setTimeout(proceed,1500);
+  gtag("event","tracker_checkout_click",{...params,event_callback:proceed,event_timeout:1200});
 });
 </script></body></html>
