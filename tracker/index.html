@@ -24,13 +24,13 @@ h1{font-size:clamp(42px,11vw,70px);line-height:.94;letter-spacing:-.05em;margin:
 <p>Wähle eine Sache, die du 30 Tage durchziehen willst. Markiere jeden echten Tag, halte deinen Beweis fest und steige nach einem Aussetzer direkt wieder ein.</p>
 <p><strong>Enthalten:</strong> 30-Tage-Tracker, Kein-Nulltag-Regel, Beweislog, Wochenreviews, Wiedereinstieg und THE WALL 30.</p>
 <div class="price">4,90 €</div>
-<a id="buy" class="buy" href="#" aria-disabled="true">Tracker holen</a>
+<a id="buy" class="buy" href="https://buy.stripe.com/eVq3cu2zM8bx1Yhe7t8Ra00?client_reference_id=direct">Tracker holen</a>
 <div class="note">Digitaler PDF-Download nach dem Kauf.</div>
 </section>
 <footer><a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a></footer>
 </main>
 <script>
-const PAYMENT_LINK="__STRIPE_PAYMENT_LINK__";
+const PAYMENT_LINK="https://buy.stripe.com/eVq3cu2zM8bx1Yhe7t8Ra00";
 const p=new URLSearchParams(location.search);
 const source=(p.get("utm_source")||"direct").replace(/[^a-zA-Z0-9_-]/g,"").slice(0,80)||"direct";
 const buy=document.getElementById("buy");
