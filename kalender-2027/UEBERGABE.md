@@ -16,3 +16,26 @@ Die vollständige Kauf-PDF bleibt außerhalb des öffentlichen Repositories. Zuf
 Impressum und Datenschutz sind als lokale Seiten vorhanden. Eine rechtliche Prüfung und die Checkout-Texte sind nicht Teil dieser Integration.
 
 Keine neue Testfrist oder Besuchergrenze beschlossen. Tracker-Kriterien unverändert.
+
+## Kaufbutton vorbereitet, weiterhin gesperrt
+
+`#calendar-buy` ist ein nativ deaktivierter Button ohne Checkout-Adresse oder
+Klick-Handler. Die kostenlose Vorschau ist weiterhin separat verlinkt.
+Zum Freischalten ist ein eigener, bestätigter Kalender-Payment-Link erforderlich;
+der bestehende Tracker-Link darf hierfür nicht wiederverwendet werden.
+
+Vor einer separaten Freigabe müssen dokumentiert sein:
+
+1. Bestätigter Preis und korrekte Stripe-Produktbeschreibung (digitales PDF,
+   26 Seiten, A4 quer; keine gedruckte Ware).
+2. Kostenloser Stripe-Sandbox-Durchlauf inklusive Weiterleitung und tatsächlichem
+   Zugriff auf die vollständige, geschützte Kauf-PDF. Vorschau und Danke-Seite
+   allein sind kein Auslieferungsnachweis.
+3. Prüfung, dass abgebrochene oder fehlgeschlagene Zahlungen keinen Download
+   freigeben; ein direkter Danke-Seitenaufruf bestätigt keinen Kauf.
+4. Nachweis mit Datum, Testmodus, Ergebnis und Freigabe ohne Kundendaten oder
+   geheime URLs im öffentlichen Repository.
+
+Erst danach den deaktivierten Button durch den freigegebenen Stripe-Kauflink
+ersetzen und den Verkaufsstatus aktualisieren. Kein Live-Zahlungstest erforderlich.
+Der derzeitige Stand erfüllt diese Freigabekriterien noch nicht.
