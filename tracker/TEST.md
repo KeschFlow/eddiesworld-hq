@@ -45,3 +45,24 @@ In GA4-Echtzeit/DebugView den Empfang von Landingpage- und Checkout-Ereignissen 
 ## PDF-Prüfung
 
 Die saubere Download-URL ohne Parameter wurde am 02.10.2026 geprüft: HTTP 200, Content-Type application/pdf, sieben Seiten, bytegleich mit der Drive-Quelle.
+
+## Technische Auslieferungsprüfung im Repository
+
+`tracker/index.html` öffnet den bestehenden Live-Payment-Link. Die optionale
+Messung und `client_reference_id` ordnen Quellen zu, prüfen aber keine Zahlung.
+`tracker_test=1` ist ausschließlich eine Messmarkierung, kein Stripe-Testmodus.
+
+`tracker/danke/index.html` ist eine statische, ohne Anmeldung aufrufbare Seite
+und verlinkt direkt auf die öffentliche Tracker-PDF. Die PDF liefert auch ein
+unabhängiger HTTP-Aufruf ohne Checkout, Cookie oder Session erfolgreich aus.
+`noindex,nofollow` und der Dateiname bieten keinen Zugriffsschutz.
+
+Die vollständige Untersuchung der getrackten Repository-Dateien ergab keine
+Stripe-Session-Prüfung, Webhooks, Serverfunktionen, E-Mail-Auslieferung oder
+Stripe-Sandbox-Konfiguration. Die vorhandenen Firebase-Funktionen messen
+Interaktionen bzw. betreiben Raw-Log-Voting; sie validieren keine Zahlung.
+Die in Stripe gespeicherte Erfolgsweiterleitung und mögliche externe Prozesse
+sind ohne Kontozugriff nicht verifiziert. Der Repository-Ablauf selbst prüft
+Zahlungen nicht. Für den Kalender wird diese ungeschützte Auslieferung deshalb
+nicht als Schutzmechanismus übernommen. Testvorbereitung: siehe
+`kalender-2027/TEST.md`.

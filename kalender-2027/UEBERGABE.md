@@ -77,3 +77,8 @@ Stripe-/Auslieferungstest. In der untersuchten Umgebung fehlen Stripe-spezifisch
 Variablen und eine Stripe-Anbindung; ein HTTPS-Zugriff auf den angegebenen
 Payment-Link wird vom Netzwerkproxy mit CONNECT 403 abgewiesen.
 Keine Zahlung wurde ausgelöst. Keine neue Infrastruktur und kein Deployment.
+
+Die minimale, noch im bestehenden Stripe-Konto anzulegende Testkonfiguration
+und das Ergebnisprotokoll stehen in [TEST.md](TEST.md). Der Nutzer bestätigt:
+Der Kalender-Payment-Link ist live; ein Sandbox-Link und eine bestätigte
+Auslieferung existieren derzeit nicht. Der Live-Link wird nicht für Tests genutzt.
