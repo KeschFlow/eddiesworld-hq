@@ -22,6 +22,7 @@ h1{font-size:clamp(30px,6vw,46px);line-height:1.1;margin:0 0 6px}
 img{max-width:100%;height:auto;display:block;border:1px solid var(--line)}
 .hero{margin:0 0 28px}
 .btn{display:inline-block;background:var(--acc);color:#fff;text-decoration:none;font-weight:700;padding:14px 26px;border-radius:6px}
+.btn:disabled{opacity:.6;cursor:not-allowed;border:0;font:inherit;font-weight:700}
 .btn:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .price{font-size:22px;font-weight:700;margin:0 0 12px}
 .small{color:var(--mut);font-size:14px}
@@ -47,7 +48,11 @@ footer{margin-top:40px;color:var(--mut);font-size:14px}
 
   <p class="price">PDF-Kalender zum Selbstausdrucken</p>
   <p><a class="btn" href="Mit-Eddie-durchs-Jahr-2027-VORSCHAU.pdf">Kostenlose Vorschau öffnen</a></p>
-  <p class="small">Der Verkauf ist noch nicht geöffnet. Hier kannst du bereits drei Originalseiten ansehen.</p>
+  <!-- Stripe: erst nach dokumentiertem Sandbox-Test und Freigabe als Kauf-Link aktivieren.
+       Eigener Kalender-Payment-Link erforderlich; niemals den Tracker-Checkout verwenden.
+       Freigabekriterien siehe UEBERGABE.md. Kein Checkout-URL-Platzhalter im DOM. -->
+  <p><button id="calendar-buy" class="btn" type="button" disabled aria-describedby="calendar-sale-status">Kalender kaufen – bald verfügbar</button></p>
+  <p id="calendar-sale-status" class="small">Der Verkauf ist noch nicht geöffnet. Hier kannst du bereits drei Originalseiten ansehen.</p>
 
   <div class="grid">
     <div class="card"><h2>Was drin ist</h2>
