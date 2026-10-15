@@ -154,15 +154,6 @@
       font-size:17px;
     }
 
-    .entry-nav {
-      display:flex;
-      justify-content:center;
-      flex-wrap:wrap;
-      gap:12px 22px;
-      margin:0 0 28px;
-    }
-
-    .entry-nav a { color:var(--fg); text-underline-offset:4px; }
     a:focus-visible { outline:2px solid #fff; outline-offset:4px; }
     .product {
       border:1px solid var(--line);
@@ -174,7 +165,7 @@
     .product h2 { margin:0 0 12px; font-size:25px; }
     .product p { color:var(--muted); line-height:1.55; }
     .product .links { margin-bottom:14px; }
-    .product > a { color:var(--fg); text-underline-offset:4px; }
+    .product a { color:var(--fg); text-underline-offset:4px; }
 
     .button-icon {
       width:24px;
@@ -244,25 +235,24 @@
     Kein Drehbuch. Keine Show. Kein Creator-Theater.
   </p>
 
-  <nav class="entry-nav" aria-label="Eddie’s World entdecken">
-    <a href="/books/">Bücher</a>
-    <a href="/tracker/">UNAUFHALTSAM 30</a>
-    <a href="/kalender-2027/">Kalender 2027</a>
-    <a id="unaufhaltsam-link" href="https://focus-system-unaufhaltsam.github.io/eddie/" target="_blank" rel="noopener noreferrer">Fokus-Game</a>
-    <a href="https://app.amazecommerce.com/shop/eddiesworld" target="_blank" rel="noopener noreferrer">Merch</a>
-    <a href="/raw-logs.html">Eddie / Raw Logs</a>
+  <nav class="links" aria-label="Eddie’s World entdecken">
+    <a id="unaufhaltsam-link" class="button" href="https://focus-system-unaufhaltsam.github.io/eddie/" target="_blank" rel="noopener noreferrer">UNAUFHALTSAM öffnen</a>
+    <a class="button" href="/books/">Bücher / Raw Editions</a>
+    <a class="button" href="https://app.amazecommerce.com/shop/eddiesworld" target="_blank" rel="noopener noreferrer">Merch</a>
+    <a class="button" href="/tracker/">UNAUFHALTSAM 30 / Tracker</a>
+    <a class="button" href="/kalender-2027/">Kalender 2027</a>
   </nav>
 
   <section class="product" aria-labelledby="tracker-title">
     <h2 id="tracker-title">UNAUFHALTSAM 30 – Jeden Tag wieder</h2>
     <p>30 Tage. Ein Verhalten. Der PDF-Tracker mit Beweislog, Wochenreviews und Wiedereinstieg.</p>
-    <div class="links"><a class="button" href="/tracker/">Tracker ansehen · 4,90 €</a></div>
+    <p><a href="/tracker/">Tracker ansehen · 4,90 €</a></p>
   </section>
 
   <section class="product" aria-labelledby="calendar-title">
     <h2 id="calendar-title">Mit Eddie durchs Jahr 2027</h2>
     <p>Zwölf echte Eddie-Momente und zwölf Monatskalender. 26 Seiten in A4 quer zum Selbstausdrucken.</p>
-    <div class="links"><a class="button" href="/kalender-2027/">Kalender-Vorschau ansehen</a></div>
+    <p><a href="/kalender-2027/">Kalender-Vorschau ansehen</a></p>
     <p>Der Verkauf ist noch nicht geöffnet.</p>
   </section>
 
@@ -276,9 +266,8 @@
       <li>physisches Produkt</li>
       <li>ideal als Geschenk oder Beschäftigung</li>
     </ul>
-    <div class="links">
+    <p>
     <a
-      class="button"
       href="https://amzn.to/4egvGwi"
       target="_blank"
       rel="sponsored noopener noreferrer"
@@ -286,7 +275,7 @@
       <span>Auf Amazon ansehen</span>
     </a>
 
-    </div>
+    </p>
     <a href="/books/">Alle fünf Bücher ansehen →</a>
   </section>
 
