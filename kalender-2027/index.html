@@ -46,12 +46,13 @@ footer{margin-top:40px;color:var(--mut);font-size:14px}
 
   <img class="hero" src="img/titel.jpg" alt="Titelseite des Kalenders Mit Eddie durchs Jahr 2027 mit Eddie im Gras" width="1052" height="744">
 
-  <p class="price">PDF-Kalender zum Selbstausdrucken</p>
+  <p class="price">4,90 € einmalig</p>
+  <p>Digitales PDF · 26 Seiten · A4 quer · Selbstausdruck</p>
   <p><a class="btn" href="Mit-Eddie-durchs-Jahr-2027-VORSCHAU.pdf">Kostenlose Vorschau öffnen</a></p>
   <!-- Stripe: erst nach dokumentiertem Sandbox-Test und Freigabe als Kauf-Link aktivieren.
        Eigener Kalender-Payment-Link erforderlich; niemals den Tracker-Checkout verwenden.
-       Freigabekriterien siehe UEBERGABE.md. Kein Checkout-URL-Platzhalter im DOM. -->
-  <p><button id="calendar-buy" class="btn" type="button" disabled aria-describedby="calendar-sale-status">Kalender kaufen – bald verfügbar</button></p>
+       Freigabekriterien siehe UEBERGABE.md. data-checkout-url navigiert nicht. -->
+  <p><button id="calendar-buy" class="btn" type="button" disabled data-checkout-url="https://buy.stripe.com/3cI8wOa2e0J546paVh8Ra02" aria-describedby="calendar-sale-status">Kalender kaufen – 4,90 €</button></p>
   <p id="calendar-sale-status" class="small">Der Verkauf ist noch nicht geöffnet. Hier kannst du bereits drei Originalseiten ansehen.</p>
 
   <div class="grid">
