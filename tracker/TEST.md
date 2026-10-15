@@ -66,3 +66,15 @@ sind ohne Kontozugriff nicht verifiziert. Der Repository-Ablauf selbst prüft
 Zahlungen nicht. Für den Kalender wird diese ungeschützte Auslieferung deshalb
 nicht als Schutzmechanismus übernommen. Testvorbereitung: siehe
 `kalender-2027/TEST.md`.
+
+## Vorbereitung der geschützten Auslieferung (noch nicht deployed)
+
+Der Branch für verifizierte Produktauslieferung ersetzt die alte öffentliche
+Danke-Auslieferung durch serverseitige Prüfung. Die oben beschriebene ungeschützte
+Implementierung ist der untersuchte Ausgangsstand. Der alte statische PDF-Pfad
+wurde im neuen Baum entfernt, das Original bytegleich außerhalb des Checkouts
+gesichert. Alte Git-Versionen und Live-Caches bleiben davon unberührt.
+
+Neue Tracker-Käufe sind bis zur Integration und tatsächlichen Sandbox-Prüfung
+pausiert. Details, offene Infrastrukturzuordnung und Bindings: `delivery/README.md`.
+Lokale Modul- und Browsertests sind kein echter Stripe-Testkauf.

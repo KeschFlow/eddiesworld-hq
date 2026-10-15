@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex,nofollow">
 <title>Kalender – Bestellstatus | Eddie's World</title>
 <style>
@@ -14,15 +15,17 @@ main{max-width:640px;margin:0 auto;padding:48px 20px}
 h1{margin:0 0 12px}
 .btn{display:inline-block;background:var(--acc);color:#fff;text-decoration:none;font-weight:700;padding:14px 26px;border-radius:6px}
 .small{color:var(--mut);font-size:14px}
-</style>
+[hidden]{display:none!important}</style>
 </head>
 <body>
 <main>
   <h1>Der Verkauf ist noch nicht geöffnet.</h1>
-  <p>Ein Aufruf dieser Seite bestätigt keine erfolgreiche Zahlung.</p>
+  <p id="delivery-status" role="status">Ein Aufruf dieser Seite bestätigt keine erfolgreiche Zahlung.</p>
   <p>Ein Kalender-Download ist hier noch nicht verfügbar. Der Auslieferungsweg wird vor dem Verkaufsstart geprüft.</p>
+  <p><button id="product-download" class="btn" type="button" data-product="calendar" hidden disabled>Kalender-PDF herunterladen</button></p>
   <p><a class="btn" href="/kalender-2027/">Zur Kalender-Vorschau</a></p>
   <p class="small"><a href="/" style="color:inherit">eddiesworld.de</a></p>
 </main>
+<script src="/delivery-client.js" defer></script>
 </body>
 </html>

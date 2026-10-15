@@ -82,3 +82,14 @@ Die minimale, noch im bestehenden Stripe-Konto anzulegende Testkonfiguration
 und das Ergebnisprotokoll stehen in [TEST.md](TEST.md). Der Nutzer bestätigt:
 Der Kalender-Payment-Link ist live; ein Sandbox-Link und eine bestätigte
 Auslieferung existieren derzeit nicht. Der Live-Link wird nicht für Tests genutzt.
+
+## Nachfolgende Vorbereitung: eigener serverseitiger Download
+
+Variante A ist in `delivery/worker.mjs` lokal vorbereitet; Integration und
+Ressourcenprüfung sind offen. Beide Danke-Seiten verwenden den gemeinsamen
+`delivery-client.js`. Ein erfolgreicher Testmodus-Kauf wird erst nach echter
+Stripe-Prüfung im Backend zum Download zugelassen. Es gibt weiterhin keinen
+bestätigten Sandbox-Link, keinen bestätigten privaten Speicher und keinen
+ausgeführten Ende-zu-Ende-Test. Die zuvor vorgeschlagene manuelle Zustellung wurde
+nicht eingerichtet; die jetzt bevorzugte Variante ist der serverseitig validierte
+Download. Aktueller Integrationsstand: `delivery/README.md`.

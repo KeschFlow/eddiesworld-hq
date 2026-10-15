@@ -12,6 +12,7 @@ main{max-width:560px;margin:auto;text-align:center}.logo{width:86px;margin:0 aut
 h1{font-size:clamp(42px,11vw,70px);line-height:.94;letter-spacing:-.05em;margin:16px 0}.lead{font-size:21px;font-weight:800;line-height:1.35}
 .card{border:1px solid var(--line);border-radius:18px;padding:24px;margin:28px 0;text-align:left}.card p{color:var(--muted);line-height:1.55}
 .price{font-size:34px;font-weight:900;margin:22px 0}.buy{display:block;padding:18px;border-radius:18px;background:var(--purple);color:#fff;text-decoration:none;font-size:18px;font-weight:900;text-align:center}
+.buy:disabled{width:100%;border:0;opacity:.6;cursor:not-allowed;font-family:inherit}
 .note{font-size:13px;color:var(--muted);margin-top:14px}footer{margin-top:32px;font-size:14px}footer a{color:var(--muted);margin:0 7px}
 
 .analytics-choice{border-top:1px solid var(--line);padding:18px 0;margin-top:28px;font-size:13px;color:var(--muted);line-height:1.5}
@@ -30,8 +31,8 @@ h1{font-size:clamp(42px,11vw,70px);line-height:.94;letter-spacing:-.05em;margin:
 <p>Wähle eine Sache, die du 30 Tage durchziehen willst. Markiere jeden echten Tag, halte deinen Beweis fest und steige nach einem Aussetzer direkt wieder ein.</p>
 <p><strong>Enthalten:</strong> 30-Tage-Tracker, Kein-Nulltag-Regel, Beweislog, Wochenreviews, Wiedereinstieg und THE WALL 30.</p>
 <div class="price">4,90 €</div>
-<a id="buy" class="buy" href="https://buy.stripe.com/eVq3cu2zM8bx1Yhe7t8Ra00?client_reference_id=direct">Tracker holen</a>
-<div class="note">Digitaler PDF-Download nach dem Kauf.</div>
+<button id="buy" class="buy" type="button" disabled>Tracker kaufen – vorübergehend pausiert</button>
+<div class="note">Digitaler PDF-Download. Der Verkauf pausiert bis zur geprüften geschützten Auslieferung.</div>
 </section>
 <footer><a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a></footer>
 
