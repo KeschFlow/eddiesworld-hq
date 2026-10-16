@@ -8,14 +8,14 @@
   url.searchParams.delete('session_id');
   history.replaceState(null, '', url.pathname + url.search + url.hash);
   const product = button.dataset.product;
-  if (!/^cs_test_[A-Za-z0-9_]{8,240}$/.test(session || '')) return;
+  if (!/^cs_(?:test|live)_[A-Za-z0-9_]{8,240}$/.test(session || '')) return;
   const deliveryBase = product === 'calendar'
     ? 'https://kf001-owner-backend.keschflow.workers.dev/api/delivery/'
     : '/api/delivery/';
   let busy = false;
   button.hidden = false;
   button.disabled = false;
-  status.textContent = 'Testbestellung: Die Zahlung wird erst beim Download serverseitig geprüft.';
+  status.textContent = (session.startsWith('cs_test_') ? 'Testbestellung: ' : '') + 'Die Zahlung wird beim Download sicher geprüft.';
   button.addEventListener('click', async () => {
     if (busy) return;
     busy = true; button.disabled = true;
