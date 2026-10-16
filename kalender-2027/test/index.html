@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>Kalender – Sandbox-Auslieferungstest</title>
+<style>body{background:#111;color:#fff;font:18px/1.6 system-ui;margin:0}main{max-width:650px;margin:60px auto;padding:24px}input,button{box-sizing:border-box;width:100%;padding:14px;font:inherit;margin:12px 0}button{background:#800080;color:#fff;border:0;border-radius:6px}p{overflow-wrap:anywhere}</style>
+<main><h1>Vorhandenen Testkauf prüfen</h1><p>Nur Stripe-Sandbox. Keine neue Zahlung. Die Sitzungs-ID bleibt aus der Seitenadresse und wird ausschließlich an den Auslieferungs-Worker gesendet.</p>
+<form id="test"><label for="session">Checkout-Sitzungs-ID (cs_test_…)</label><input id="session" required pattern="cs_test_[A-Za-z0-9_]{8,240}" autocomplete="off" spellcheck="false"><button id="run">Zahlung prüfen und Kalender herunterladen</button></form><p id="status" role="status">Bereit für den vorhandenen Testkauf.</p><p>Erst wenn die richtige PDF vollständig geöffnet wurde, ist die Auslieferung nachgewiesen.</p></main>
+<script>
+const form=document.getElementById('test'),input=document.getElementById('session'),button=document.getElementById('run'),status=document.getElementById('status');
+const codes=new Set(['CONFIG_INVALID','REQUEST_INVALID','ORIGIN_REJECTED','PRODUCT_MISMATCH','STRIPE_SESSION_FAILED','STRIPE_HTTP_REJECTED','STRIPE_NETWORK_FAILED','SESSION_MISMATCH','STRIPE_LINE_ITEMS_FAILED','LINE_ITEM_MISMATCH','PAYMENT_INTENT_FAILED','PAYMENT_INTENT_MISMATCH','CHARGE_FAILED','CHARGE_MISMATCH','R2_FILE_MISSING','R2_ACCESS_FAILED','TOKEN_INVALID','INTERNAL_ERROR']);
+form.addEventListener('submit',async event=>{
+event.preventDefault();if(button.disabled)return;const session=input.value.trim();if(!/^cs_test_[A-Za-z0-9_]{8,240}$/.test(session)){status.textContent='Bitte eine Sandbox-Sitzungs-ID einsetzen.';return;}button.disabled=true;input.value='';
+let phase='Zahlungsprüfung';
+const post=async(action,body)=>{const r=await fetch('https://kf001-owner-backend.keschflow.workers.dev/api/delivery/'+action,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),credentials:'omit',cache:'no-store',referrerPolicy:'no-referrer'});if(!r.ok){const data=await r.json().catch(()=>({}));throw new Error('HTTP '+r.status+(codes.has(data.code)?' · '+data.code:''));}return r;};
+try{status.textContent='Zahlung und private Datei werden geprüft …';const auth=await post('authorize',{session,product:'calendar'});const {token}=await auth.json();if(typeof token!=='string')throw new Error('Ungültige Serverantwort');phase='PDF-Auslieferung';const pdf=await post('download',{token});if(!pdf.headers.get('Content-Type')?.startsWith('application/pdf'))throw new Error('Keine PDF erhalten');const blob=await pdf.blob();if(await blob.slice(0,5).text()!=='%PDF-')throw new Error('Ungültige PDF-Datei');const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Mit-Eddie-durchs-Jahr-2027-26-Seiten-A4-quer.pdf';a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);status.textContent='Zahlungsprüfung und PDF-Empfang erfolgreich. Download gestartet ('+blob.size+' Bytes). Öffne die Datei und prüfe alle 26 Seiten.';}
+catch(error){status.textContent=phase+': '+(error instanceof TypeError?'Verbindung oder Browserfreigabe fehlgeschlagen.':error.message);}
+finally{button.disabled=false;}
+});
+</script></html>
