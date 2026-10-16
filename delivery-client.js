@@ -9,6 +9,9 @@
   history.replaceState(null, '', url.pathname + url.search + url.hash);
   const product = button.dataset.product;
   if (!/^cs_test_[A-Za-z0-9_]{8,240}$/.test(session || '')) return;
+  const deliveryBase = product === 'calendar'
+    ? 'https://kf001-owner-backend.keschflow.workers.dev/api/delivery/'
+    : '/api/delivery/';
   let busy = false;
   button.hidden = false;
   button.disabled = false;
@@ -16,7 +19,7 @@
   button.addEventListener('click', async () => {
     if (busy) return;
     busy = true; button.disabled = true;
-    const post = (action, body) => fetch('/api/delivery/' + action, {
+    const post = (action, body) => fetch(deliveryBase + action, {
       method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body),
       credentials:'omit', cache:'no-store', referrerPolicy:'no-referrer'
     });
