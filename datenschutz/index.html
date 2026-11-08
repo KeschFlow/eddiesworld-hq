@@ -87,6 +87,7 @@
       try { localStorage.setItem("eddie_ga4_consent", choice); } catch (_) {}
       panel.remove();
       if (choice === "yes") loadAnalytics();
+      else if (window.__eddieGa4Loaded) window.location.reload();
     });
     document.body.appendChild(panel);
   }
@@ -99,7 +100,8 @@
     if (reset) reset.addEventListener("click", function(event) {
       event.preventDefault();
       try { localStorage.removeItem("eddie_ga4_consent"); } catch (_) {}
-      showChoice();
+      if (window.__eddieGa4Loaded) window.location.reload();
+      else showChoice();
     });
   });
 })();
