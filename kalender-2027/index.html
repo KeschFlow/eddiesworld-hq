@@ -65,6 +65,7 @@ footer{margin-top:40px;color:var(--mut);font-size:14px}
       try { localStorage.setItem("eddie_ga4_consent", choice); } catch (_) {}
       panel.remove();
       if (choice === "yes") loadAnalytics();
+      else if (window.__eddieGa4Loaded) window.location.reload();
     });
     document.body.appendChild(panel);
   }
@@ -77,7 +78,8 @@ footer{margin-top:40px;color:var(--mut);font-size:14px}
     if (reset) reset.addEventListener("click", function(event) {
       event.preventDefault();
       try { localStorage.removeItem("eddie_ga4_consent"); } catch (_) {}
-      showChoice();
+      if (window.__eddieGa4Loaded) window.location.reload();
+      else showChoice();
     });
   });
 })();
@@ -129,6 +131,7 @@ footer{margin-top:40px;color:var(--mut);font-size:14px}
 
   <footer>
     <a href="/">eddiesworld.de</a> · <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a>
+    <a href="#" id="eddie-analytics-settings">Analytics-Einstellungen</a>
   </footer>
 </main>
 </body>
