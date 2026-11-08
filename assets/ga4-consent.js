@@ -22,6 +22,15 @@
     return window.location.origin + window.location.pathname;
   }
 
+  function safeReferrer() {
+    try {
+      var referrer = new URL(document.referrer);
+      return referrer.origin + referrer.pathname;
+    } catch (_) {
+      return "";
+    }
+  }
+
   function loadAnalytics() {
     if (loaded || consent !== "yes") return;
     loaded = true;
@@ -31,6 +40,7 @@
     window.gtag("js", new Date());
     window.gtag("config", measurementId, {
       page_location: currentPage(),
+      page_referrer: safeReferrer(),
       allow_google_signals: false,
       allow_ad_personalization_signals: false
     });
