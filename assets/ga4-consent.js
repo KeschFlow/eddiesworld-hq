@@ -101,7 +101,7 @@
     panel.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:99999;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;background:#111;color:#fff;padding:16px max(16px, calc((100vw - 900px)/2));border-top:3px solid #800080;box-shadow:0 -2px 14px #0008;font:15px/1.5 system-ui,sans-serif";
     var copy = document.createElement("div");
     copy.style.cssText = "flex:1 1 320px;max-width:680px";
-    copy.textContent = "Optionale Reichweitenmessung mit Google Analytics 4. Seitenaufrufe und der Klick auf „Kalender kaufen“ werden nur nach deiner Zustimmung gemessen. Du kannst deine Entscheidung jederzeit in den Analytics-Einstellungen ändern. ";
+    copy.textContent = "Optionale Reichweitenmessung durch Google Analytics 4 von Google. Bei Zustimmung werden Seitenaufrufe und Klicks auf „Kalender kaufen“ erfasst; dabei können Browser- und Geräteinformationen sowie Analytics-Cookies verarbeitet werden. Ohne Zustimmung werden keine Messdaten an Google gesendet. Du kannst deine Entscheidung jederzeit in den Analytics-Einstellungen ändern. ";
     var privacy = document.createElement("a");
     privacy.href = "/datenschutz/";
     privacy.textContent = "Datenschutz";
