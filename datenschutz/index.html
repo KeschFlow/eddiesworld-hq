@@ -15,7 +15,7 @@
     <h1>Datenschutzerklärung</h1>
     
     <h2>1. Datenschutz auf einen Blick</h2>
-    <p>Diese Webseite wird über GitHub Pages gehostet. Wir erfassen nur Daten, die technisch notwendig sind oder die du uns aktiv durch die Teilnahme am Spiel (Unaufhaltsam) oder dem Archiv-Voting (KEEP-THIS) übermittelst.</p>
+    <p>Diese Webseite wird über GitHub Pages gehostet. Wir verarbeiten technisch notwendige Daten sowie Daten, die du aktiv durch die Teilnahme am Spiel (UNAUFHALTSAM), dem Archiv-Voting (KEEP-THIS), optionaler Webanalyse oder durch eine Kontaktaufnahme bereitstellst. Details zu den einzelnen Zwecken und Rechtsgrundlagen findest du in den folgenden Abschnitten.</p>
 
     <h2>2. Hosting und Infrastruktur</h2>
     <p>Unsere Website liegt auf Servern von GitHub Inc. (USA). Beim Aufruf der Seite werden Logfiles (IP-Adresse, Zeitstempel) durch den Hoster verarbeitet.</p>
@@ -51,60 +51,14 @@
     <p>Google-Nutzerdaten werden nicht länger gespeichert als für den jeweiligen Zweck erforderlich. Nutzer können den Zugriff der Anwendung jederzeit über die Sicherheitseinstellungen ihres Google-Kontos widerrufen.</p>
 
     <h2>6. Optionale Webanalyse (Google Analytics 4)</h2>
-    <p>Wenn du ausdrücklich zustimmst, laden wir Google Analytics 4 (Google) mit der Mess-ID G-0DFW5EMT8M, um Seitenaufrufe und die Nutzung unserer Website auszuwerten. Dabei können Nutzungs- und Geräteinformationen an Google übertragen werden. Ohne Zustimmung wird das Analytics-Skript nicht geladen. Die Entscheidung wird lokal im Browser gespeichert. Du kannst sie jederzeit über <a href="#" id="eddie-analytics-settings">Analytics-Einstellungen</a> erneut treffen. Weitere Informationen findest du in den Datenschutzhinweisen von Google.</p>
+    <p>Verantwortlich ist die im <a href="/impressum/">Impressum</a> genannte Person. Die optionale Webanalyse wird nur aktiviert, wenn du zuvor ausdrücklich zugestimmt hast. Ohne Zustimmung wird kein Google-Analytics-Skript geladen und es werden keine Analytics-Daten an Google gesendet. Rechtsgrundlage sind deine Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO und, soweit Informationen auf deinem Endgerät gespeichert oder ausgelesen werden, § 25 Abs. 1 TDDDG. Du kannst deine Einwilligung jederzeit über <a href="#" id="eddie-analytics-settings">Analytics-Einstellungen</a> widerrufen. Der Widerruf gilt für die Zukunft und berührt die Rechtmäßigkeit der Verarbeitung bis dahin nicht.</p>
+    <p>Bei Zustimmung nutzen wir ausschließlich den vorhandenen Google-Analytics-4-Webdatenstrom „eddiesworld_hq“ (Mess-ID G-0DFW5EMT8M) der Property „mg-challenge“. Erfasst werden Seitenaufrufe sowie Klicks auf den Kalender-Kaufbutton. Dabei können insbesondere Browser- und Geräteinformationen, eine gekürzte Seitenadresse ohne URL-Parameter und der Zeitpunkt der Interaktion an Google übermittelt werden. Die Messung nutzt Analytics-Cookies wie _ga und _ga_*. Google kann im Rahmen der technischen Übertragung auch die IP-Adresse erhalten; laut Google wird sie in Analytics nicht protokolliert oder gespeichert.</p>
+    <p>Empfänger ist Google. Für den Europäischen Wirtschaftsraum ist Google Ireland Limited benannt; je nach Verarbeitung können auch weitere Google-Gesellschaften beteiligt sein. Eine Verarbeitung oder Übermittlung in Drittländer kann nicht ausgeschlossen werden. Google nennt dafür je nach Fall Angemessenheitsbeschlüsse oder Standardvertragsklauseln. Weitere Informationen: <a href="https://policies.google.com/privacy?hl=de" target="_blank" rel="noopener noreferrer">Datenschutzerklärung von Google</a> und <a href="https://business.safety.google/adsprocessorterms/" target="_blank" rel="noopener noreferrer">Google-Datenschutzbedingungen für Geschäftsdaten</a>.</p>
+    <p>Die Einwilligungsentscheidung wird lokal in deinem Browser gespeichert, bis du sie änderst oder den Browserspeicher löschst. In den aktuellen Einstellungen der GA4-Property werden Ereignisdaten 2 Monate und Nutzerdaten 14 Monate aufbewahrt; die Einstellung „Bei neuer Nutzeraktivität zurücksetzen“ ist aktiviert. Analytics-Einstellungen können sich ändern.</p>
     <h2>7. Deine Rechte</h2>
     <p>Du hast das Recht auf Auskunft, Berichtigung und Löschung deiner gespeicherten Daten. Kontaktiere uns dazu einfach per E-Mail.</p>
 
     <a href="/" class="back-link">← Zurück zur Startseite</a>
-<!-- GA4: optional analytics, loaded only after explicit consent -->
-<script>
-(function () {
-  const measurementId = "G-0DFW5EMT8M";
-  function loadAnalytics() {
-    if (window.__eddieGa4Loaded) return;
-    window.__eddieGa4Loaded = true;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){ window.dataLayer.push(arguments); };
-    window.gtag("js", new Date());
-    window.gtag("config", measurementId);
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(measurementId);
-    document.head.appendChild(script);
-  }
-  function showChoice() {
-    if (document.getElementById("eddie-analytics-consent")) return;
-    const panel = document.createElement("div");
-    panel.id = "eddie-analytics-consent";
-    panel.setAttribute("role", "region");
-    panel.setAttribute("aria-label", "Optionale Besuchermessung");
-    panel.style.cssText = "position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#111;color:#fff;padding:14px 20px;border-top:2px solid #800080;font:15px/1.5 system-ui,sans-serif;box-shadow:0 -2px 12px #0008";
-    panel.innerHTML = '<span>Optionale Besuchermessung mit Google Analytics 4. Nur mit deiner Zustimmung. <a style="color:#e9a9e9" href="/datenschutz/">Datenschutz</a></span> <button type="button" data-choice="no" style="margin:6px;padding:8px 12px">Ablehnen</button> <button type="button" data-choice="yes" style="margin:6px;padding:8px 12px">Zustimmen</button>';
-    panel.addEventListener("click", function(event) {
-      const button = event.target.closest("button[data-choice]");
-      if (!button) return;
-      const choice = button.getAttribute("data-choice");
-      try { localStorage.setItem("eddie_ga4_consent", choice); } catch (_) {}
-      panel.remove();
-      if (choice === "yes") loadAnalytics();
-      else if (window.__eddieGa4Loaded) window.location.reload();
-    });
-    document.body.appendChild(panel);
-  }
-  document.addEventListener("DOMContentLoaded", function () {
-    let consent = null;
-    try { consent = localStorage.getItem("eddie_ga4_consent"); } catch (_) {}
-    if (consent === "yes") loadAnalytics();
-    else if (consent !== "no") showChoice();
-    const reset = document.getElementById("eddie-analytics-settings");
-    if (reset) reset.addEventListener("click", function(event) {
-      event.preventDefault();
-      try { localStorage.removeItem("eddie_ga4_consent"); } catch (_) {}
-      if (window.__eddieGa4Loaded) window.location.reload();
-      else showChoice();
-    });
-  });
-})();
-</script>
+<script src="/assets/ga4-consent.js" defer></script>
 </body>
 </html>
