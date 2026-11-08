@@ -34,56 +34,7 @@ img{max-width:100%;height:auto;display:block;border:1px solid var(--line)}
 a{color:var(--fg)}
 footer{margin-top:40px;color:var(--mut);font-size:14px}
 </style>
-<!-- GA4: optional analytics, loaded only after explicit consent -->
-<script>
-(function () {
-  const measurementId = "G-0DFW5EMT8M";
-  function loadAnalytics() {
-    if (window.__eddieGa4Loaded) return;
-    window.__eddieGa4Loaded = true;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){ window.dataLayer.push(arguments); };
-    window.gtag("js", new Date());
-    window.gtag("config", measurementId);
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(measurementId);
-    document.head.appendChild(script);
-  }
-  function showChoice() {
-    if (document.getElementById("eddie-analytics-consent")) return;
-    const panel = document.createElement("div");
-    panel.id = "eddie-analytics-consent";
-    panel.setAttribute("role", "region");
-    panel.setAttribute("aria-label", "Optionale Besuchermessung");
-    panel.style.cssText = "position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#111;color:#fff;padding:14px 20px;border-top:2px solid #800080;font:15px/1.5 system-ui,sans-serif;box-shadow:0 -2px 12px #0008";
-    panel.innerHTML = '<span>Optionale Besuchermessung mit Google Analytics 4. Nur mit deiner Zustimmung. <a style="color:#e9a9e9" href="/datenschutz/">Datenschutz</a></span> <button type="button" data-choice="no" style="margin:6px;padding:8px 12px">Ablehnen</button> <button type="button" data-choice="yes" style="margin:6px;padding:8px 12px">Zustimmen</button>';
-    panel.addEventListener("click", function(event) {
-      const button = event.target.closest("button[data-choice]");
-      if (!button) return;
-      const choice = button.getAttribute("data-choice");
-      try { localStorage.setItem("eddie_ga4_consent", choice); } catch (_) {}
-      panel.remove();
-      if (choice === "yes") loadAnalytics();
-      else if (window.__eddieGa4Loaded) window.location.reload();
-    });
-    document.body.appendChild(panel);
-  }
-  document.addEventListener("DOMContentLoaded", function () {
-    let consent = null;
-    try { consent = localStorage.getItem("eddie_ga4_consent"); } catch (_) {}
-    if (consent === "yes") loadAnalytics();
-    else if (consent !== "no") showChoice();
-    const reset = document.getElementById("eddie-analytics-settings");
-    if (reset) reset.addEventListener("click", function(event) {
-      event.preventDefault();
-      try { localStorage.removeItem("eddie_ga4_consent"); } catch (_) {}
-      if (window.__eddieGa4Loaded) window.location.reload();
-      else showChoice();
-    });
-  });
-})();
-</script>
+<script src="/assets/ga4-consent.js" defer></script>
 </head>
 <body>
 <main>
