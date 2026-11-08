@@ -139,6 +139,7 @@ function createPage(savedConsent) {
   return {
     window,
     document,
+    listeners: documentListeners,
     storage,
     cookieWrites,
     settingsLink,
@@ -189,7 +190,7 @@ test("a purchase click sends its event and continues to the unchanged Stripe URL
     }
   };
 
-  page.documentListeners.click(event);
+  page.listeners.click(event);
 
   assert.equal(event.prevented, true);
   const analyticsEvent = page.window.dataLayer.find(
@@ -215,7 +216,7 @@ test("a saved rejection does not add a tag or intercept the checkout link", () =
 
   assert.equal(page.consentPanel(), null);
   assert.equal(page.scripts.length, 0);
-  page.documentListeners.click(event);
+  page.listeners.click(event);
   assert.equal(event.prevented, false);
   assert.equal(page.window.dataLayer, undefined);
 });
