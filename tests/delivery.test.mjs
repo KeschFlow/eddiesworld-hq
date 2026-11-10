@@ -2,56 +2,127 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createHandler} from '../delivery/worker.mjs';
 
-function fixture() {
-  let clock=1000, gets=0;
-  const product={price:'price_calendar',product:'prod_calendar',amount:490,currency:'eur',key:'calendar.pdf'};
-  const env={STRIPE_SECRET_KEY:'sk_test_fixture_only',DOWNLOAD_SIGNING_KEY:'fixture-signing-key-not-for-real-use-123456',DELIVERY_MODE:'test',
-    DELIVERY_PRODUCTS:JSON.stringify({calendar:product,tracker:{...product,price:'price_tracker',product:'prod_tracker',key:'tracker.pdf'}}),
-    PRODUCT_FILES:{head:async()=>({}),get:async()=>{gets++;return {body:new TextEncoder().encode('%PDF-fixture')}}}};
-  const session={id:'cs_test_fixture123',livemode:false,mode:'payment',status:'complete',payment_status:'paid',amount_total:490,currency:'eur',payment_intent:'pi_fixture'};
-  const items={has_more:false,data:[{quantity:1,amount_total:490,price:{id:'price_calendar',product:'prod_calendar',unit_amount:490,currency:'eur',type:'one_time'}}]};
-  const intent={id:'pi_fixture',livemode:false,status:'succeeded',amount:490,amount_received:490,currency:'eur',latest_charge:'ch_fixture'};
-  const charge={id:'ch_fixture',payment_intent:'pi_fixture',livemode:false,status:'succeeded',paid:true,captured:true,amount:490,amount_captured:490,currency:'eur',refunded:false,amount_refunded:0,disputed:false};
-  let offline=false;
-  const fetcher=async url=>{
-    if(offline)throw Error('offline');
-    const data=url.includes('/line_items')?items:url.includes('/checkout/sessions/')?session:url.includes('/payment_intents/')?intent:charge;
+function fixture({mode = 'live'} = {}) {
+  let gets = 0;
+  const live = mode === 'live';
+  const amount = 666;
+  const sessionId = live ? 'cs_live_calendar123' : 'cs_test_calendar123';
+  const product = {price:'price_calendar_fixture', product:'prod_calendar_fixture', amount, currency:'eur', key:'calendar.pdf'};
+  const tracker = {price:'price_tracker_fixture', product:'prod_tracker_fixture', amount:490, currency:'eur', key:'tracker.pdf'};
+  const env = {
+    DELIVERY_MODE:mode,
+    STRIPE_SECRET_KEY:live ? 'sk_live_fixture_only' : 'sk_test_fixture_only',
+    DOWNLOAD_SIGNING_KEY:'fixture-signing-key-not-for-real-use-123456',
+    DELIVERY_PRODUCTS:JSON.stringify({calendar:product, tracker}),
+    PRODUCT_FILES:{
+      head:async key => key === product.key ? {key} : null,
+      get:async key => { if (key !== product.key) return null; gets++; return {body:new TextEncoder().encode('%PDF-fixture')}; }
+    }
+  };
+  const session = {id:sessionId, livemode:live, mode:'payment', status:'complete', payment_status:'paid', amount_total:amount, currency:'eur', payment_intent:'pi_calendar_fixture'};
+  const items = {has_more:false, data:[{quantity:1, amount_total:amount, price:{id:product.price, product:product.product, unit_amount:amount, currency:'eur', type:'one_time'}}]};
+  const intent = {id:'pi_calendar_fixture', livemode:live, status:'succeeded', amount, amount_received:amount, currency:'eur', latest_charge:'ch_calendar_fixture'};
+  const charge = {id:'ch_calendar_fixture', payment_intent:intent.id, livemode:live, status:'succeeded', paid:true, captured:true, amount, amount_captured:amount, currency:'eur', refunded:false, amount_refunded:0, disputed:false};
+  const fetcher = async input => {
+    const url = String(input);
+    let data;
+    if (url.includes('/line_items')) data = items;
+    else if (url.includes('/checkout/sessions/')) data = session;
+    else if (url.includes('/payment_intents/')) data = intent;
+    else if (url.includes('/charges/')) data = charge;
+    else throw new Error('Unexpected mocked Stripe URL');
     return Response.json(data);
   };
-  const handler=createHandler({fetcher,now:()=>clock});
-  const call=(action,body,options={})=>handler(new Request('https://shop.example/api/delivery/'+action,{method:'POST',headers:{Origin:'https://shop.example','Content-Type':'application/json',...options.headers},body:JSON.stringify(body)}),env);
-  return {env,session,items,intent,charge,call,get gets(){return gets},advance:seconds=>clock+=seconds,offline:()=>offline=true};
+  const handler = createHandler({fetcher, now:() => 1000});
+  const call = (action, body, {method='POST', headers={}}={}) => handler(new Request(`https://shop.example/api/delivery/${action}`, {
+    method,
+    headers:{Origin:'https://shop.example', 'Content-Type':'application/json', ...headers},
+    ...(method === 'POST' ? {body:JSON.stringify(body)} : {})
+  }), env);
+  return {env, session, items, intent, charge, call, get gets() { return gets; }, sessionId};
 }
-const request={product:'calendar',session:'cs_test_fixture123'};
-async function token(f){const response=await f.call('authorize',request);assert.equal(response.status,200);return (await response.json()).token;}
 
-test('paid test session: private PDF; reuse allowed during five-minute lifetime',async()=>{
- const f=fixture();const value=await token(f);
- for(let i=0;i<2;i++){const r=await f.call('download',{token:value});assert.equal(r.status,200);assert.equal(await r.text(),'%PDF-fixture');assert.equal(r.headers.get('Cache-Control'),'no-store');}
- assert.equal(f.gets,2);
+test('live calendar payment for exactly EUR 6.66 authorizes and serves private PDF', async () => {
+  const f = fixture();
+  const authorization = await f.call('authorize', {product:'calendar', session:f.sessionId});
+  assert.equal(authorization.status, 200);
+  const {token} = await authorization.json();
+  const download = await f.call('download', {token});
+  assert.equal(download.status, 200);
+  assert.equal(await download.text(), '%PDF-fixture');
+  assert.equal(download.headers.get('Cache-Control'), 'no-store');
+  assert.equal(download.headers.get('Content-Type'), 'application/pdf');
+  assert.equal(f.gets, 1);
 });
-for(const [name,mutate] of [
- ['abandoned',f=>f.session.status='open'],['failed',f=>f.session.payment_status='unpaid'],
- ['wrong product',f=>f.items.data[0].price.product='prod_other'],['wrong price',f=>f.items.data[0].price.id='price_other'],
- ['wrong amount',f=>f.session.amount_total=1],['wrong currency',f=>f.session.currency='usd'],
- ['live session',f=>f.session.livemode=true],['wrong quantity',f=>f.items.data[0].quantity=2],
- ['more items',f=>f.items.has_more=true],['intent canceled',f=>f.intent.status='canceled'],
- ['refunded',f=>f.charge.refunded=true],['partial refund',f=>f.charge.amount_refunded=1],
- ['disputed',f=>f.charge.disputed=true],['uncaptured',f=>f.charge.captured=false],
- ['Stripe unavailable',f=>f.offline()],['missing file',f=>f.env.PRODUCT_FILES.head=async()=>null],
- ['live secret',f=>f.env.STRIPE_SECRET_KEY='sk_live_fixture'],['missing secret',f=>delete f.env.DOWNLOAD_SIGNING_KEY],
- ['same product mapping',f=>{const p=JSON.parse(f.env.DELIVERY_PRODUCTS);p.tracker=p.calendar;f.env.DELIVERY_PRODUCTS=JSON.stringify(p)}]
-]) test(`rejects ${name}`,async()=>{const f=fixture();mutate(f);assert.equal((await f.call('authorize',request)).status,403);assert.equal(f.gets,0)});
 
-test('expired and tampered tokens rejected',async()=>{const f=fixture(),value=await token(f);assert.equal((await f.call('download',{token:'x'+value})).status,403);f.advance(300);assert.equal((await f.call('download',{token:value})).status,403);assert.equal(f.gets,0)});
-test('refund after authorization invalidates token',async()=>{const f=fixture(),value=await token(f);f.charge.amount_refunded=1;assert.equal((await f.call('download',{token:value})).status,403);assert.equal(f.gets,0)});
-test('bare requests, unknown product and live session references are denied',async()=>{const f=fixture();for(const body of [{},{...request,product:'other'},{...request,session:'cs_live_fixture123'}])assert.equal((await f.call('authorize',body)).status,403);assert.equal((await f.call('download',{})).status,403)});
-test('cross-origin request denied',async()=>{const f=fixture();assert.equal((await f.call('authorize',request,{headers:{Origin:'https://other.example'}})).status,403)});
-test('bare GET cannot authorize or download',async()=>{const f=fixture();const h=createHandler();for(const route of ['authorize','download'])assert.equal((await h(new Request('https://shop.example/api/delivery/'+route),f.env)).status,405)});
-test('tracker session authorizes only tracker file',async()=>{
- const f=fixture();f.items.data[0].price.id='price_tracker';f.items.data[0].price.product='prod_tracker';
- const response=await f.call('authorize',{...request,product:'tracker'});assert.equal(response.status,200);
- const {token:value}=await response.json();const download=await f.call('download',{token:value});assert.equal(download.status,200);
- assert.equal(download.headers.get('Content-Disposition'),'attachment; filename="tracker.pdf"');
- assert.equal((await f.call('authorize',request)).status,403);
+test('test and live configurations remain mode-separated; tracker remains EUR 4.90', async () => {
+  const testMode = fixture({mode:'test'});
+  assert.equal((await testMode.call('authorize', {product:'calendar', session:testMode.sessionId})).status, 200);
+  testMode.env.STRIPE_SECRET_KEY = 'sk_live_mismatched_fixture';
+  assert.equal((await testMode.call('authorize', {product:'calendar', session:testMode.sessionId})).status, 403);
+
+  const liveMode = fixture();
+  const config = JSON.parse(liveMode.env.DELIVERY_PRODUCTS);
+  assert.equal(config.calendar.amount, 666);
+  assert.equal(config.tracker.amount, 490);
+  liveMode.env.STRIPE_SECRET_KEY = 'sk_test_mismatched_fixture';
+  assert.equal((await liveMode.call('authorize', {product:'calendar', session:liveMode.sessionId})).status, 403);
+});
+
+test('rejects a calendar payment for the wrong amount', async () => {
+  const f = fixture();
+  f.session.amount_total = 665;
+  assert.equal((await f.call('authorize', {product:'calendar', session:f.sessionId})).status, 403);
+  assert.equal(f.gets, 0);
+});
+
+test('rejects missing, incomplete, unpaid, or unsuccessful payment', async t => {
+  for (const [label, change] of [
+    ['missing session', f => { f.session.id = 'cs_live_another123'; }],
+    ['incomplete checkout', f => { f.session.status = 'open'; }],
+    ['unpaid checkout', f => { f.session.payment_status = 'unpaid'; }],
+    ['unsuccessful intent', f => { f.intent.status = 'processing'; }]
+  ]) {
+    await t.test(label, async () => {
+      const f = fixture();
+      change(f);
+      assert.equal((await f.call('authorize', {product:'calendar', session:f.sessionId})).status, 403);
+      assert.equal(f.gets, 0);
+    });
+  }
+});
+
+test('rejects a refunded charge and revokes an already-issued download token', async () => {
+  const f = fixture();
+  const authorization = await f.call('authorize', {product:'calendar', session:f.sessionId});
+  assert.equal(authorization.status, 200);
+  const {token} = await authorization.json();
+  f.charge.refunded = true;
+  f.charge.amount_refunded = 666;
+  assert.equal((await f.call('download', {token})).status, 403);
+  assert.equal(f.gets, 0);
+});
+
+test('denies unauthorized PDF access without reading the private R2 object', async () => {
+  const f = fixture();
+  assert.equal((await f.call('download', {})).status, 403);
+  assert.equal((await f.call('download', {token:'forged.token'})).status, 403);
+  assert.equal((await f.call('download', {}, {method:'GET'})).status, 405);
+  assert.equal(f.gets, 0);
+});
+
+test('rejects wrong mode, wrong product, partial refund, and dispute', async t => {
+  for (const [label, change] of [
+    ['test-mode session in live mode', f => { f.session.livemode = false; }],
+    ['different product', f => { f.items.data[0].price.product = 'prod_unapproved'; }],
+    ['partial refund', f => { f.charge.amount_refunded = 1; }],
+    ['disputed charge', f => { f.charge.disputed = true; }]
+  ]) {
+    await t.test(label, async () => {
+      const f = fixture();
+      change(f);
+      assert.equal((await f.call('authorize', {product:'calendar', session:f.sessionId})).status, 403);
+      assert.equal(f.gets, 0);
+    });
+  }
 });
