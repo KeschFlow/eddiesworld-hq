@@ -47,7 +47,7 @@ andere Währungen oder verzögert bezahlte Bestellungen werden nicht freigegeben
 
 1. Tatsächliches Repository des geeigneten bestehenden Backends verfügbar machen;
    Binding-Konfiguration ohne Ausgabe von Secret-Werten prüfen. Bestehende Routen
-   erhalten. Keine pauschale Ersetzung des Worker-Handlers durch dieses Modul.
+erhalten. Keine pauschale Ersetzung des Worker-Handlers durch dieses Modul.
 2. Geeigneten bereits vorhandenen privaten Speicher nachweisen. Dieses Modul
    erwartet ein privates R2-Binding `PRODUCT_FILES` (`head`/`get`). Öffentliche
    R2-Zugänge, `r2.dev` und öffentliche Bucket-Domains müssen aus sein. D1 allein
@@ -117,3 +117,22 @@ bestehende Backend-/Privatspeicher-Verbund. Kostenärmste sichere nächste Optio
 den vorhandenen allgemeinen Worker prüfen und geeigneten vorhandenen Speicher
 binden. Falls keiner existiert, kann dessen Einrichtung erst nach gesonderter
 Prüfung von Kosten und Freigabe entschieden werden. Bis dahin keine Freischaltung.
+
+## Kalenderpreis 6,66 € – Live-Zuordnung blockiert
+
+Die Kalender-Verkaufsseite wurde auf den vom Betreiber angegebenen Stripe-Payment-Link
+und den Preis 6,66 € aktualisiert. Für den neuen Live-Preis wurden folgende Werte
+als Betreiberangaben übermittelt: `price_1UaBzKA2B4kHryh7DtZFO3Dp`,
+`prod_VRpIYK7uCrYyvV`, `amount:666`, `currency:"eur"`. Diese Angaben sind in dieser
+Änderung nicht unabhängig über die Stripe-API verifiziert und nicht in eine
+produktive Cloudflare-Konfiguration geschrieben.
+
+Der hier versionierte `delivery/worker.mjs` akzeptiert ausschließlich Stripe-
+Testschlüssel und Test-Sessions (`livemode=false`, `cs_test_…`) und erwartet
+weiterhin 490 Cent. Es gibt im Repository keine `DELIVERY_PRODUCTS`-Runtime-Datei
+und keinen Zugriff auf die produktive Worker-Konfiguration. Damit kann dieser
+Worker die neue Live-Zahlung nicht freigeben. Die Prüfungen wurden absichtlich
+nicht gelockert oder umgangen. Vor Live-Freigabe muss die zuständige bestehende
+Backend-/Cloudflare-Konfiguration und ein für Live-Zahlungen vorgesehener,
+weiterhin strikt validierender Auslieferungsweg geprüft und angepasst werden.
+Eine erfolgreiche PDF-Auslieferung ist nicht nachgewiesen.
