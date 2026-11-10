@@ -5,13 +5,14 @@ const headers = {'Cache-Control':'no-store', 'Referrer-Policy':'no-referrer', 'X
 function reply(status, message) { return new Response(JSON.stringify({message}), {status, headers:{...headers,'Content-Type':'application/json'}}); }
 function reject() { throw new Error('denied'); }
 function settings(env) {
-  if (!env.STRIPE_SECRET_KEY?.startsWith('sk_test_') || env.DELIVERY_MODE !== 'test' ||
+  if (!['test', 'live'].includes(env.DELIVERY_MODE) ||
+      !env.STRIPE_SECRET_KEY?.startsWith(env.DELIVERY_MODE === 'live' ? 'sk_live_' : 'sk_test_') ||
       !env.DOWNLOAD_SIGNING_KEY || env.DOWNLOAD_SIGNING_KEY.length < 32 || !env.PRODUCT_FILES?.get) reject();
   const products = JSON.parse(env.DELIVERY_PRODUCTS || '{}');
   for (const id of ['tracker', 'calendar']) {
     const p = products[id];
     if (!p || !/^price_\w+$/.test(p.price) || !/^prod_\w+$/.test(p.product) ||
-        !Number.isSafeInteger(p.amount) || p.amount !== 490 || p.currency !== 'eur' ||
+        !Number.isSafeInteger(p.amount) || p.amount !== (id === 'calendar' ? 666 : 490) || p.currency !== 'eur' ||
         typeof p.key !== 'string' || !p.key || p.key.includes('..')) reject();
   }
   if (products.tracker.price === products.calendar.price || products.tracker.product === products.calendar.product ||
@@ -27,9 +28,10 @@ async function stripe(path, env, fetcher) {
   return response.json();
 }
 async function verify(sessionId, product, env, fetcher) {
-  if (!/^cs_test_[A-Za-z0-9_]{8,240}$/.test(sessionId || '')) reject();
+  const live = env.DELIVERY_MODE === 'live';
+  if (!(live ? /^cs_live_[A-Za-z0-9_]{8,240}$/ : /^cs_test_[A-Za-z0-9_]{8,240}$/).test(sessionId || '')) reject();
   const session = await stripe('checkout/sessions/' + encodeURIComponent(sessionId), env, fetcher);
-  if (session.id !== sessionId || session.livemode !== false || session.mode !== 'payment' ||
+  if (session.id !== sessionId || session.livemode !== live || session.mode !== 'payment' ||
       session.status !== 'complete' || session.payment_status !== 'paid' ||
       session.amount_total !== product.amount || session.currency !== product.currency ||
       typeof session.payment_intent !== 'string') reject();
@@ -40,11 +42,11 @@ async function verify(sessionId, product, env, fetcher) {
       item.price?.unit_amount !== product.amount || item.price?.currency !== product.currency ||
       item.price?.type !== 'one_time' || item.amount_total !== product.amount) reject();
   const intent = await stripe('payment_intents/' + encodeURIComponent(session.payment_intent), env, fetcher);
-  if (intent.id !== session.payment_intent || intent.livemode !== false || intent.status !== 'succeeded' ||
+  if (intent.id !== session.payment_intent || intent.livemode !== live || intent.status !== 'succeeded' ||
       intent.amount !== product.amount || intent.amount_received !== product.amount ||
       intent.currency !== product.currency || typeof intent.latest_charge !== 'string') reject();
   const charge = await stripe('charges/' + encodeURIComponent(intent.latest_charge), env, fetcher);
-  if (charge.id !== intent.latest_charge || charge.payment_intent !== intent.id || charge.livemode !== false ||
+  if (charge.id !== intent.latest_charge || charge.payment_intent !== intent.id || charge.livemode !== live ||
       charge.status !== 'succeeded' || charge.paid !== true || charge.captured !== true ||
       charge.amount !== product.amount || charge.amount_captured !== product.amount ||
       charge.currency !== product.currency || charge.refunded !== false ||
