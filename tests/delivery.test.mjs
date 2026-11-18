@@ -1,6 +1,59 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
 import {createHandler} from '../delivery/worker.mjs';
+
+const deliveryClientSource = readFileSync(new URL('../delivery-client.js', import.meta.url), 'utf8');
+const sessionPattern = /^cs_(?:test|live)_[A-Za-z0-9_]{8,240}$/;
+
+function loadDeliveryClient({href, product, storage = new Map(), storageBlocked = false}) {
+  const status = {textContent: ''};
+  const button = {
+    hidden: true,
+    disabled: true,
+    dataset: {product},
+    setAttribute() {},
+    removeAttribute() {},
+    addEventListener(type, handler) {
+      if (type === 'click') this.onclick = handler;
+    }
+  };
+  const calls = [];
+  let replaced = null;
+  const sandbox = {
+    document: {
+      getElementById(id) {
+        if (id === 'product-download') return button;
+        if (id === 'delivery-status') return status;
+        return null;
+      }
+    },
+    location: {href},
+    history: {replaceState(_state, _title, next) { replaced = next; }},
+    sessionStorage: {
+      getItem(key) {
+        if (storageBlocked) throw new Error('storage blocked');
+        return storage.has(key) ? storage.get(key) : null;
+      },
+      setItem(key, value) {
+        if (storageBlocked) throw new Error('storage blocked');
+        storage.set(key, String(value));
+      }
+    },
+    fetch(url, init) {
+      const body = JSON.parse(init.body);
+      calls.push({url: String(url), body});
+      return Promise.resolve({ok: false, headers: {get() { return null; }}});
+    },
+    URL,
+    JSON,
+    Error,
+    Promise
+  };
+  vm.runInNewContext(deliveryClientSource, sandbox, {filename: 'delivery-client.js'});
+  return {button, status, replaced, calls, storage};
+}
 
 function fixture({mode = 'live'} = {}) {
   let gets = 0;
@@ -125,4 +178,123 @@ test('rejects wrong mode, wrong product, partial refund, and dispute', async t =
       assert.equal(f.gets, 0);
     });
   }
+});
+
+test('thank-you reload keeps the validated session for that product only', async () => {
+  const storage = new Map();
+  const calendarSession = 'cs_live_calendar123';
+  const first = loadDeliveryClient({
+    href: `https://eddiesworld.de/kalender-2027/danke/?session_id=${calendarSession}&utm=keep#file`,
+    product: 'calendar',
+    storage
+  });
+  assert.equal(first.button.hidden, false);
+  assert.equal(first.button.disabled, false);
+  assert.equal(first.replaced, '/kalender-2027/danke/?utm=keep#file');
+  assert.equal(storage.get('kf-delivery-session:calendar'), calendarSession);
+  assert.equal(storage.has('kf-delivery-session:tracker'), false);
+  assert.equal(first.status.textContent, 'Die Zahlung wird beim Download sicher geprüft.');
+  assert.equal(first.calls.length, 0);
+
+  const reloaded = loadDeliveryClient({
+    href: 'https://eddiesworld.de/kalender-2027/danke/?utm=keep#file',
+    product: 'calendar',
+    storage
+  });
+  assert.equal(reloaded.button.hidden, false);
+  assert.equal(reloaded.status.textContent, 'Die Zahlung wird beim Download sicher geprüft.');
+  await reloaded.button.onclick();
+  assert.equal(reloaded.calls.length, 1);
+  assert.equal(reloaded.calls[0].body.session, calendarSession);
+  assert.equal(reloaded.calls[0].body.product, 'calendar');
+  assert.match(reloaded.calls[0].body.session, sessionPattern);
+
+  const tracker = loadDeliveryClient({
+    href: 'https://eddiesworld.de/tracker/danke/',
+    product: 'tracker',
+    storage
+  });
+  assert.equal(tracker.button.hidden, true);
+  assert.equal(tracker.button.onclick, undefined);
+  assert.equal(tracker.calls.length, 0);
+  assert.match(tracker.status.textContent, /Öffne diese Seite über die Weiterleitung/);
+  assert.equal(storage.get('kf-delivery-session:calendar'), calendarSession);
+
+  const trackerSession = 'cs_test_tracker12345';
+  const trackerPaid = loadDeliveryClient({
+    href: `https://eddiesworld.de/tracker/danke/?session_id=${trackerSession}`,
+    product: 'tracker',
+    storage
+  });
+  assert.equal(trackerPaid.button.hidden, false);
+  assert.equal(storage.get('kf-delivery-session:tracker'), trackerSession);
+  assert.equal(storage.get('kf-delivery-session:calendar'), calendarSession);
+  const trackerReload = loadDeliveryClient({
+    href: 'https://eddiesworld.de/tracker/danke/',
+    product: 'tracker',
+    storage
+  });
+  assert.match(trackerReload.status.textContent, /^Testbestellung: /);
+  await trackerReload.button.onclick();
+  assert.equal(trackerReload.calls[0].body.session, trackerSession);
+  assert.equal(trackerReload.calls[0].body.product, 'tracker');
+});
+
+test('invalid delivery sessions are not stored or sent; blocked storage keeps the previous path', async () => {
+  const storage = new Map();
+  const invalid = loadDeliveryClient({
+    href: 'https://eddiesworld.de/kalender-2027/danke/?session_id=cs_live_short',
+    product: 'calendar',
+    storage
+  });
+  assert.equal(invalid.button.hidden, true);
+  assert.equal(invalid.calls.length, 0);
+  assert.equal(storage.size, 0);
+  assert.equal(invalid.replaced, '/kalender-2027/danke/');
+
+  const kept = 'cs_live_calendar123';
+  storage.set('kf-delivery-session:calendar', kept);
+  storage.set('kf-delivery-session:tracker', 'cs_test_tracker12345');
+  const ignored = loadDeliveryClient({
+    href: 'https://eddiesworld.de/kalender-2027/danke/?session_id=not-a-session',
+    product: 'calendar',
+    storage
+  });
+  assert.equal(ignored.button.hidden, false);
+  assert.equal(storage.get('kf-delivery-session:calendar'), kept);
+  assert.equal(storage.get('kf-delivery-session:tracker'), 'cs_test_tracker12345');
+  await ignored.button.onclick();
+  assert.equal(ignored.calls.length, 1);
+  assert.equal(ignored.calls[0].body.session, kept);
+  assert.match(ignored.calls[0].body.session, sessionPattern);
+
+  storage.set('kf-delivery-session:calendar', 'javascript:alert(1)');
+  const tampered = loadDeliveryClient({
+    href: 'https://eddiesworld.de/kalender-2027/danke/',
+    product: 'calendar',
+    storage
+  });
+  assert.equal(tampered.button.hidden, true);
+  assert.equal(tampered.calls.length, 0);
+  assert.equal(tampered.button.onclick, undefined);
+
+  const blocked = loadDeliveryClient({
+    href: 'https://eddiesworld.de/kalender-2027/danke/?session_id=cs_test_calendar123',
+    product: 'calendar',
+    storageBlocked: true
+  });
+  assert.equal(blocked.button.hidden, false);
+  assert.match(blocked.status.textContent, /^Testbestellung: /);
+  await blocked.button.onclick();
+  assert.equal(blocked.calls[0].body.session, 'cs_test_calendar123');
+  assert.match(blocked.calls[0].body.session, sessionPattern);
+
+  const blockedReload = loadDeliveryClient({
+    href: 'https://eddiesworld.de/kalender-2027/danke/',
+    product: 'calendar',
+    storageBlocked: true
+  });
+  assert.equal(blockedReload.button.hidden, true);
+  assert.equal(blockedReload.calls.length, 0);
+  assert.match(blockedReload.status.textContent, /Öffne diese Seite über die Weiterleitung/);
 });

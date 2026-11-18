@@ -4,11 +4,18 @@
   const status = document.getElementById('delivery-status');
   if (!button || !status) return;
   const url = new URL(location.href);
-  const session = url.searchParams.get('session_id');
+  const product = button.dataset.product;
+  const sessionPattern = /^cs_(?:test|live)_[A-Za-z0-9_]{8,240}$/;
+  // Keep the order reference for this tab so a reload does not lose the download (scoped per product).
+  const storageKey = 'kf-delivery-session:' + product;
+  let session = url.searchParams.get('session_id');
   url.searchParams.delete('session_id');
   history.replaceState(null, '', url.pathname + url.search + url.hash);
-  const product = button.dataset.product;
-  if (!/^cs_(?:test|live)_[A-Za-z0-9_]{8,240}$/.test(session || '')) {
+  try {
+    if (sessionPattern.test(session || '')) sessionStorage.setItem(storageKey, session);
+    else session = sessionStorage.getItem(storageKey);
+  } catch { /* storage unavailable: behave as before */ }
+  if (!sessionPattern.test(session || '')) {
     status.textContent = 'Öffne diese Seite über die Weiterleitung nach deiner Zahlung. Ohne Bestellzuordnung ist kein Download möglich.';
     return;
   }
