@@ -14,6 +14,13 @@ const EXPECTED = [
     placement: "home_product"
   },
   {
+    file: "index.html",
+    href: "https://amzn.to/3SGjaPG",
+    event: "purchase_click",
+    productId: "keschflow_creator_tools",
+    placement: "home_creator_tools"
+  },
+  {
     file: "books/index.html",
     href: "https://link.amazon/B0eaJdNQ9",
     event: "purchase_click",
