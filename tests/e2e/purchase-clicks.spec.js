@@ -206,6 +206,7 @@ test("mobile screenshots of buy sections", async ({ browser }) => {
   const page = await context.newPage();
   const shots = [
     { path: "/", selector: "section.product:has(a[href='https://amzn.to/4egvGwi'])", name: "home-book.png" },
+    { path: "/", selector: "section.product:has(a[href='https://amzn.to/3SGjaPG'])", name: "home-creator-tools.png" },
     { path: "/books/", selector: "section.catalog", name: "books-grid.png" },
     { path: "/raw-logs.html", selector: "section.archive-cta", name: "raw-logs-book.png" }
   ];
