@@ -35,6 +35,10 @@ function createPage(savedConsent) {
       setAttribute(name, value) {
         this.attrs[name] = value;
       },
+      getAttribute(name) {
+        if (name === "id") return this.id || null;
+        return Object.prototype.hasOwnProperty.call(this.attrs, name) ? this.attrs[name] : null;
+      },
       remove() {
         this.removed = true;
         if (this.parent) {
@@ -42,8 +46,22 @@ function createPage(savedConsent) {
         }
       },
       closest(selector) {
-        if (selector === "button[data-choice]" && this.tagName === "BUTTON") return this;
-        if (selector === "#calendar-buy" && this.id === "calendar-buy") return this;
+        let node = this;
+        const parts = selector.split(",").map((part) => part.trim());
+        while (node) {
+          const matched = parts.some((part) => {
+            if (part === "button[data-choice]") return node.tagName === "BUTTON" && node.dataset.choice;
+            if (part === "a#calendar-buy" || part === "#calendar-buy") {
+              return node.tagName === "A" && node.id === "calendar-buy";
+            }
+            if (part === "a[data-purchase-product]") {
+              return node.tagName === "A" && node.getAttribute("data-purchase-product");
+            }
+            return false;
+          });
+          if (matched) return node;
+          node = node.parent || null;
+        }
         return null;
       }
     };
@@ -180,8 +198,9 @@ test("acceptance loads only the existing stream and strips URL parameters", () =
   assert.equal(page.window.dataLayer[1][2].page_referrer, "https://eddiesworld.de/");
 });
 
-test("a purchase click sends its event and continues to the unchanged Stripe URL", () => {
+test("a calendar purchase click sends calendar_purchase_click once and does not block navigation", () => {
   const page = createPage("yes");
+  const hrefBefore = page.buyLink.href;
   const event = {
     target: page.buyLink,
     prevented: false,
@@ -192,16 +211,55 @@ test("a purchase click sends its event and continues to the unchanged Stripe URL
 
   page.listeners.click(event);
 
-  assert.equal(event.prevented, true);
-  const analyticsEvent = page.window.dataLayer.find(
+  assert.equal(event.prevented, false);
+  assert.equal(page.buyLink.href, hrefBefore);
+  assert.equal(page.window.location.assigned, undefined);
+  const analyticsEvents = page.window.dataLayer.filter(
     (entry) => entry[0] === "event" && entry[1] === "calendar_purchase_click"
   );
-  assert.ok(analyticsEvent);
-  assert.equal(analyticsEvent[2].link_url, page.buyLink.href);
+  assert.equal(analyticsEvents.length, 1);
+  assert.equal(analyticsEvents[0][2].link_url, hrefBefore);
+  assert.equal(analyticsEvents[0][2].product_id, "calendar_2027");
+  assert.equal(analyticsEvents[0][2].placement, "product_page");
+  assert.equal(analyticsEvents[0][2].page_path, "/kalender-2027/");
+  assert.equal(analyticsEvents[0][2].transport_type, "beacon");
+});
 
-  analyticsEvent[2].event_callback();
-  page.window.fallbackNavigation();
-  assert.equal(page.window.location.assigned, page.buyLink.href);
+test("a book purchase click sends one purchase_click from a nested target", () => {
+  const page = createPage("yes");
+  const bookLink = page.document.createElement("a");
+  bookLink.href = "https://amzn.to/4egvGwi";
+  bookLink.textContent = "Auf Amazon ansehen";
+  bookLink.setAttribute("data-purchase-event", "purchase_click");
+  bookLink.setAttribute("data-purchase-product", "B0H3MDYSMG");
+  bookLink.setAttribute("data-purchase-placement", "home_product");
+  const label = page.document.createElement("span");
+  label.textContent = "Auf Amazon ansehen";
+  label.parent = bookLink;
+  const event = {
+    target: label,
+    prevented: false,
+    preventDefault() {
+      this.prevented = true;
+    }
+  };
+
+  page.listeners.click(event);
+
+  assert.equal(event.prevented, false);
+  assert.equal(bookLink.href, "https://amzn.to/4egvGwi");
+  const analyticsEvents = page.window.dataLayer.filter(
+    (entry) => entry[0] === "event" && entry[1] === "purchase_click"
+  );
+  assert.equal(analyticsEvents.length, 1);
+  assert.equal(analyticsEvents[0][2].product_id, "B0H3MDYSMG");
+  assert.equal(analyticsEvents[0][2].placement, "home_product");
+  assert.equal(analyticsEvents[0][2].link_url, "https://amzn.to/4egvGwi");
+  assert.equal(analyticsEvents[0][2].transport_type, "beacon");
+  const calendarEvents = page.window.dataLayer.filter(
+    (entry) => entry[0] === "event" && entry[1] === "calendar_purchase_click"
+  );
+  assert.equal(calendarEvents.length, 0);
 });
 
 test("a saved rejection does not add a tag or intercept the checkout link", () => {
@@ -218,6 +276,20 @@ test("a saved rejection does not add a tag or intercept the checkout link", () =
   assert.equal(page.scripts.length, 0);
   page.listeners.click(event);
   assert.equal(event.prevented, false);
+  assert.equal(page.window.dataLayer, undefined);
+
+  const bookLink = page.document.createElement("a");
+  bookLink.href = "https://link.amazon/B0eaJdNQ9";
+  bookLink.setAttribute("data-purchase-product", "life-os-junior-4-6");
+  bookLink.setAttribute("data-purchase-placement", "books_grid");
+  page.listeners.click({
+    target: bookLink,
+    preventDefault() {
+      event.prevented = true;
+    }
+  });
+  assert.equal(event.prevented, false);
+  assert.equal(bookLink.href, "https://link.amazon/B0eaJdNQ9");
   assert.equal(page.window.dataLayer, undefined);
 });
 
