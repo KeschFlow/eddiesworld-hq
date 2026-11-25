@@ -1,4 +1,15 @@
-/* Eddie's World: basic consent for optional GA4 analytics. */
+/* Eddie's World: basic consent for optional GA4 analytics.
+   Measurement ID: G-0DFW5EMT8M (existing stream, unchanged).
+   Purchase clicks are sent only after consent === "yes" and GA4 has loaded.
+   Scheme:
+   - a#calendar-buy keeps the event name calendar_purchase_click.
+     product_id is calendar_2027. placement comes from
+     data-purchase-placement, otherwise product_page.
+   - every other a[data-purchase-product] sends purchase_click
+     (or data-purchase-event) with product_id and placement.
+   Parameters: product_id, placement, page_path, page_location, link_url, link_text.
+   transport_type is beacon. The click is never cancelled, so same-tab
+   navigation and target=_blank both proceed immediately. */
 (function () {
   "use strict";
 
@@ -90,9 +101,14 @@
     panel.appendChild(button);
   }
 
+  function removeBanner(panel) {
+    if (panel) panel.remove();
+    if (document.body) document.body.style.paddingBottom = "";
+  }
+
   function showChoice(settings) {
     var existing = document.getElementById("eddie-analytics-consent");
-    if (existing) existing.remove();
+    if (existing) removeBanner(existing);
 
     var panel = document.createElement("section");
     panel.id = "eddie-analytics-consent";
@@ -101,7 +117,7 @@
     panel.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:99999;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;background:#111;color:#fff;padding:16px max(16px, calc((100vw - 900px)/2));border-top:3px solid #800080;box-shadow:0 -2px 14px #0008;font:15px/1.5 system-ui,sans-serif";
     var copy = document.createElement("div");
     copy.style.cssText = "flex:1 1 320px;max-width:680px";
-    copy.textContent = "Optionale Reichweitenmessung durch Google Analytics 4 von Google. Bei Zustimmung werden Seitenaufrufe und Klicks auf „Kalender kaufen“ erfasst; dabei können Browser- und Geräteinformationen sowie Analytics-Cookies verarbeitet werden. Ohne Zustimmung werden keine Messdaten an Google gesendet. Du kannst deine Entscheidung jederzeit in den Analytics-Einstellungen ändern. ";
+    copy.textContent = "Optionale Reichweitenmessung durch Google Analytics 4 von Google. Bei Zustimmung werden Seitenaufrufe und Klicks auf Kauf-Links erfasst (Produkt und Platzierung auf der Seite, zum Beispiel Bücher und „Kalender kaufen“); dabei können Browser- und Geräteinformationen sowie Analytics-Cookies verarbeitet werden. Ohne Zustimmung werden keine Messdaten an Google gesendet. Du kannst deine Entscheidung jederzeit in den Analytics-Einstellungen ändern. ";
     var privacy = document.createElement("a");
     privacy.href = "/datenschutz/";
     privacy.textContent = "Datenschutz";
@@ -131,43 +147,53 @@
           return;
         }
         saveConsent("no");
-        panel.remove();
+        removeBanner(panel);
         return;
       }
       saveConsent("yes");
-      panel.remove();
+      removeBanner(panel);
       loadAnalytics();
     });
     document.body.appendChild(panel);
+    var box = typeof panel.getBoundingClientRect === "function" ? panel.getBoundingClientRect() : null;
+    if (box && box.height) document.body.style.paddingBottom = Math.ceil(box.height) + "px";
   }
 
-  function trackCalendarPurchase() {
+  function purchaseLinkFrom(event) {
+    var target = event.target;
+    if (!target) return null;
+    if (target.nodeType === 3) target = target.parentElement;
+    if (!target || typeof target.closest !== "function") return null;
+    return target.closest("a[data-purchase-product], a#calendar-buy");
+  }
+
+  function trackPurchaseClicks() {
     document.addEventListener("click", function (event) {
-      var link = event.target.closest("#calendar-buy");
+      var link = purchaseLinkFrom(event);
       if (!link || consent !== "yes" || !loaded || typeof window.gtag !== "function") return;
-      var destination = link.href;
-      event.preventDefault();
-      var navigated = false;
-      function continueToCheckout() {
-        if (navigated) return;
-        navigated = true;
-        window.location.assign(destination);
-      }
-      window.gtag("event", "calendar_purchase_click", {
+      var isCalendar = link.id === "calendar-buy";
+      var eventName = link.getAttribute("data-purchase-event") ||
+        (isCalendar ? "calendar_purchase_click" : "purchase_click");
+      var productId = link.getAttribute("data-purchase-product") ||
+        (isCalendar ? "calendar_2027" : "");
+      var placement = link.getAttribute("data-purchase-placement") ||
+        (isCalendar ? "product_page" : "");
+      if (!eventName || !productId) return;
+      window.gtag("event", eventName, {
+        product_id: productId,
+        placement: placement,
+        page_path: window.location.pathname,
         page_location: currentPage(),
-        link_url: destination,
-        link_text: link.textContent.trim(),
-        transport_type: "beacon",
-        event_timeout: 500,
-        event_callback: continueToCheckout
+        link_url: link.href,
+        link_text: (link.textContent || "").replace(/\s+/g, " ").trim(),
+        transport_type: "beacon"
       });
-      window.setTimeout(continueToCheckout, 700);
     });
   }
 
   function start() {
     consent = readConsent();
-    trackCalendarPurchase();
+    trackPurchaseClicks();
     if (consent === "yes") loadAnalytics();
     else if (consent !== "no") showChoice(false);
 

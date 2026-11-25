@@ -6,3 +6,9 @@ Eddie’s World – August Archive/
 # OS noise
 .DS_Store
 Thumbs.db
+
+# Local test installs
+node_modules/
+test-results/
+playwright-report/
+blob-report/
